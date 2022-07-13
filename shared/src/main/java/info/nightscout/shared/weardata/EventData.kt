@@ -14,7 +14,11 @@ sealed class EventData : Event() {
 
     companion object {
 
-        fun deserialize(json: String) = Json.decodeFromString(serializer(), json)
+        fun deserialize(json: String) = try {
+            Json.decodeFromString(serializer(), json)
+        } catch (ignored: Exception) {
+            Error(System.currentTimeMillis())
+        }
     }
 
     // Mobile <- Wear
@@ -208,7 +212,11 @@ sealed class EventData : Event() {
         val unitsMgdl: Boolean,
         val bolusPercentage: Int,
         val maxCarbs: Int,
-        val maxBolus: Double
+        val maxBolus: Double,
+        val insulinButtonIncrement1: Double,
+        val insulinButtonIncrement2: Double,
+        val carbsButtonIncrement1: Int,
+        val carbsButtonIncrement2: Int
     ) : EventData()
 
     @Serializable
@@ -234,7 +242,7 @@ sealed class EventData : Event() {
 
     @Serializable // returnCommand is sent back to Mobile after confirmation
     data class ConfirmAction(val title: String, val message: String, val returnCommand: EventData?) : EventData()
-    
+
     @Serializable
     data class SnoozeAlert(val timeStamp: Long) : EventData()
 }
