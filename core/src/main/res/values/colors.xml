@@ -179,7 +179,7 @@
     <color name="dummy_background">#7DFF0000</color>
 
     <color name="tempTargetBackground">#77dd77</color>
-    <color name="exercise">#42A5F5</color>
+    <color name="exercise">#FF00FF</color>
 
     <color name="action">#ffffbb33</color>
     <color name="alarm">#ffff4444</color>
