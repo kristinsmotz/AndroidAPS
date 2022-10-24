@@ -94,7 +94,7 @@
     <string name="disconnected">Disconnected</string>
     <string name="disconnecting">Disconnecting</string>
     <string name="waiting_for_disconnection">Waiting for disconnection</string>
-    <string name="androidaps_start">AndroidAPS started</string>
+    <string name="androidaps_start">AAPS started</string>
     <string name="formatinsulinunits1">%1$.1f U</string>
     <string name="formatinsulinunits">%1$.2f U</string>
     <string name="formatsignedinsulinunits">%1$+.2f U</string>
