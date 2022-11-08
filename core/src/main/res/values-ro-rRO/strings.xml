@@ -105,6 +105,24 @@
     <string name="remove_button">Șterge</string>
     <string name="addnew">Adăugare</string>
     <string name="wrong_pump_data">Datele vin de la o pompa diferita. Schimba driver-ul de pompa pentru a reseta starea pompei.</string>
+    <string name="alarminxmin">Rulează alarma în %1$d min</string>
+    <string name="treatmentdeliveryerror">Bolus a raportat o eroare. Verifică manual cantitatea livrată</string>
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Livrare de insulină suspendată</string>
+    <string name="notconfigured">Nu este configurat</string>
+    <string name="loopsuspended">Buclă suspendată</string>
+    <string name="trend_arrow">Săgeată tendinţă</string>
+    <string name="value_unavailable_short">indisponibil</string>
+    <string name="required">req</string>
+    <string name="average">Medie</string>
+    <string name="tir">Timp în țintă</string>
+    <string name="tdd_total">Total TDD</string>
+    <string name="none"><![CDATA[<nimic>]]></string>
+    <string name="remove_label">ȘTERGE</string>
+    <string name="activate_profile">Activează profil</string>
+    <string name="reset">resetare</string>
+    <string name="profileswitch_ismissing">Lipsă SchimbareProfil. Efectuați o schimbare de profil sau apăsați \"Activare profil\" în ProfilulLocal.</string>
+    <string name="profile">Profil</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">Se limitează maximul ratei bazale la %1$.2f U/o datorită %2$s</string>
     <string name="pumplimit">limită pompă</string>
@@ -228,16 +246,6 @@
     <string name="format_hour_minute">%1$dh %2$dm</string>
     <string name="mute5min">Dezactivează pentru 5 minute</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Format fișier</string>
-    <string name="metadata_label_created_at">Creat la</string>
-    <string name="metadata_label_aaps_version">Versiune AAPS</string>
-    <string name="metadata_label_aaps_flavour">Versiune de build</string>
-    <string name="metadata_label_device_name">Exporta numele dispozitivului pacientului</string>
-    <string name="metadata_label_device_model">Exportarea modelului dispozitivului</string>
-    <string name="metadata_label_encryption">Criptarea fișierului</string>
-    <string name="metadata_format_new">Format nou criptat</string>
-    <string name="metadata_format_debug">Format nou pentru debug (necriptat)</string>
-    <string name="metadata_format_other">Format de export necunoscut</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">exportat cu %1$s în urmă</string>
     <string name="exported_at" comment="at placeholder we add export date">exportat în data de %1$s</string>
     <string name="exported_less_than_hour_ago">exportat acum mai puțin de o ora</string>
@@ -262,7 +270,6 @@
     <string name="prefdecrypt_issue_wrong_format">Lipseşte configuraţia de criptare, formatul setărilor este invalid!</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Algoritm de criptare nesuportat sau nespecificat!</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Verificare semnătură</string>
     <string name="running_invalid_version">S-a detectat rularea unei versiuni invalide. Buclă dezactivată!</string>
     <string name="versionavailable">Versiunea %1$s este disponibilă</string>
     <string name="version_expire">Versiunea %1$s expiră pe %2$s</string>
@@ -417,6 +424,7 @@
     <string name="sort_label">Sortează</string>
     <!-- Autotune -->
     <string name="needconnectpermission">Aplicația are nevoie de permisiune Bluetooth</string>
+    <!-- SmsCommunicator -->
     <plurals name="days">
         <item quantity="one">%1$d zi</item>
         <item quantity="few">%1$d zile</item>

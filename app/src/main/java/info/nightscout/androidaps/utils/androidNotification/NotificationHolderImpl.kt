@@ -11,8 +11,8 @@ import androidx.core.app.TaskStackBuilder
 import info.nightscout.androidaps.MainActivity
 import info.nightscout.androidaps.core.R
 import info.nightscout.androidaps.interfaces.IconsProvider
-import info.nightscout.androidaps.interfaces.NotificationHolder
-import info.nightscout.androidaps.interfaces.ResourceHelper
+import info.nightscout.interfaces.NotificationHolder
+import info.nightscout.shared.interfaces.ResourceHelper
 import javax.inject.Inject
 import javax.inject.Singleton
 

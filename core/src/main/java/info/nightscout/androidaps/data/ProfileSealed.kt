@@ -7,25 +7,30 @@ import info.nightscout.androidaps.database.embedments.InsulinConfiguration
 import info.nightscout.androidaps.database.embedments.InterfaceIDs
 import info.nightscout.androidaps.database.entities.EffectiveProfileSwitch
 import info.nightscout.androidaps.database.entities.ProfileSwitch
-import info.nightscout.androidaps.extensions.*
-import info.nightscout.androidaps.interfaces.Config
+import info.nightscout.androidaps.extensions.blockValueBySeconds
+import info.nightscout.androidaps.extensions.highTargetBlockValueBySeconds
+import info.nightscout.androidaps.extensions.lowTargetBlockValueBySeconds
+import info.nightscout.androidaps.extensions.shiftBlock
+import info.nightscout.androidaps.extensions.shiftTargetBlock
+import info.nightscout.androidaps.extensions.targetBlockValueBySeconds
+import info.nightscout.interfaces.Config
 import info.nightscout.androidaps.interfaces.GlucoseUnit
 import info.nightscout.androidaps.interfaces.Profile
 import info.nightscout.androidaps.interfaces.Profile.Companion.secondsFromMidnight
 import info.nightscout.androidaps.interfaces.Profile.Companion.toMgdl
 import info.nightscout.androidaps.interfaces.Profile.ProfileValue
 import info.nightscout.androidaps.interfaces.Pump
-import info.nightscout.androidaps.plugins.bus.RxBus
+import info.nightscout.shared.interfaces.ResourceHelper
 import info.nightscout.androidaps.plugins.general.overview.events.EventNewNotification
-import info.nightscout.androidaps.plugins.general.overview.notifications.Notification
-import info.nightscout.androidaps.utils.DateUtil
+import info.nightscout.interfaces.notifications.Notification
+import info.nightscout.shared.utils.DateUtil
 import info.nightscout.androidaps.utils.HardLimits
-import info.nightscout.androidaps.utils.T
-import info.nightscout.androidaps.interfaces.ResourceHelper
+import info.nightscout.shared.utils.T
+import info.nightscout.rx.bus.RxBus
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.DecimalFormat
-import java.util.*
+import java.util.TimeZone
 
 sealed class ProfileSealed(
     val id: Long,
@@ -98,6 +103,7 @@ sealed class ProfileSealed(
     override fun isValid(from: String, pump: Pump, config: Config, rh: ResourceHelper, rxBus: RxBus, hardLimits: HardLimits, sendNotifications: Boolean): Profile.ValidityCheck {
         val validityCheck = Profile.ValidityCheck()
         val description = pump.pumpDescription
+
         for (basal in basalBlocks) {
             val basalAmount = basal.amount * percentage / 100.0
             if (!description.is30minBasalRatesCapable) {
@@ -142,6 +148,7 @@ sealed class ProfileSealed(
                 break
             }
         }
+
         if (!hardLimits.isInRange(dia, hardLimits.minDia(), hardLimits.maxDia())) {
             validityCheck.isValid = false
             validityCheck.reasons.add(rh.gs(R.string.value_out_of_hard_limits, rh.gs(R.string.profile_dia), dia))

@@ -14,12 +14,13 @@ import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import dagger.android.support.DaggerDialogFragment
 import info.nightscout.androidaps.core.R
-import info.nightscout.androidaps.extensions.toVisibility
-import info.nightscout.androidaps.utils.DateUtil
-import info.nightscout.shared.logging.AAPSLogger
-import info.nightscout.shared.logging.LTag
+import info.nightscout.shared.extensions.toVisibility
+import info.nightscout.shared.utils.DateUtil
+import info.nightscout.rx.logging.AAPSLogger
+import info.nightscout.rx.logging.LTag
+
 import info.nightscout.shared.sharedPreferences.SP
-import java.util.*
+import java.util.Calendar
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
@@ -52,7 +53,7 @@ abstract class DialogFragmentWithDate : DaggerDialogFragment() {
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
-        aapsLogger.debug(LTag.APS, "Dialog opened: ${this.javaClass.name}")
+        aapsLogger.debug(LTag.APS, "Dialog opened: ${this.javaClass.simpleName}")
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
@@ -123,21 +124,21 @@ abstract class DialogFragmentWithDate : DaggerDialogFragment() {
         (view.findViewById(R.id.ok) as Button?)?.setOnClickListener {
             synchronized(okClicked) {
                 if (okClicked.get()) {
-                    aapsLogger.warn(LTag.UI, "guarding: ok already clicked for dialog: ${this.javaClass.name}")
+                    aapsLogger.warn(LTag.UI, "guarding: ok already clicked for dialog: ${this.javaClass.simpleName}")
                 } else {
                     okClicked.set(true)
                     if (submit()) {
-                        aapsLogger.debug(LTag.APS, "Submit pressed for Dialog: ${this.javaClass.name}")
+                        aapsLogger.debug(LTag.APS, "Submit pressed for Dialog: ${this.javaClass.simpleName}")
                         dismiss()
                     } else {
-                        aapsLogger.debug(LTag.APS, "Submit returned false for Dialog: ${this.javaClass.name}")
+                        aapsLogger.debug(LTag.APS, "Submit returned false for Dialog: ${this.javaClass.simpleName}")
                         okClicked.set(false)
                     }
                 }
             }
         }
         (view.findViewById(R.id.cancel) as Button?)?.setOnClickListener {
-            aapsLogger.debug(LTag.APS, "Cancel pressed for dialog: ${this.javaClass.name}")
+            aapsLogger.debug(LTag.APS, "Cancel pressed for dialog: ${this.javaClass.simpleName}")
             dismiss()
         }
 

@@ -110,6 +110,36 @@
     <string name="addnew">Weiteren hinzufügen</string>
     <string name="addnew_above">Neu oben hinzufügen</string>
     <string name="wrong_pump_data">Daten kommen von einer anderen Pumpe. Wechsle den Pumpentreiber.</string>
+    <string name="alarminxmin">Alarm in %1$d Min.</string>
+    <string name="treatmentdeliveryerror">Fehlermeldung Bolusabgabe. Prüfe manuell die tatsächlich abgegebene Menge.</string>
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Pumpe pausiert</string>
+    <string name="notconfigured">Nicht konfiguriert</string>
+    <string name="loopsuspended">Loop pausiert</string>
+    <string name="trend_arrow">Trendpfeil</string>
+    <string name="value_unavailable_short">N/A</string>
+    <string name="required">angef.</string>
+    <string name="a11y_arrow_double_down">schnell fallend</string>
+    <string name="a11y_arrow_single_down">fallend</string>
+    <string name="a11y_arrow_forty_five_down">langsam fallend</string>
+    <string name="a11y_arrow_flat">stabil</string>
+    <string name="a11y_arrow_forty_five_up">Langsamer Anstieg</string>
+    <string name="a11y_arrow_single_up">steigend</string>
+    <string name="a11y_arrow_double_up">schnell steigend</string>
+    <string name="a11y_arrow_none">kein(e)</string>
+    <string name="a11y_arrow_unknown">unbekannt</string>
+    <string name="a11y_high">hoch</string>
+    <string name="a11y_inrange">im Zielbereich</string>
+    <string name="a11y_low">niedrig</string>
+    <string name="average">Durchschnitt</string>
+    <string name="tir">TIR</string>
+    <string name="tdd_total">TDD Gesamt</string>
+    <string name="none"><![CDATA[<nichts>]]></string>
+    <string name="remove_label">ENTFERNEN</string>
+    <string name="activate_profile">Aktiviere Profil</string>
+    <string name="reset">Zurücksetzen</string>
+    <string name="profileswitch_ismissing">Profil-Wechsel fehlt, bitte nimm einen Profil-Wechsel vor oder drücke \"AKTIVIERE PROFIL\" im lokalen Profil.</string>
+    <string name="profile">Profil</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">Begrenzung der max. Basalrate auf %1$.2f IE/h wegen %2$s</string>
     <string name="pumplimit">Limit der Pumpe</string>
@@ -234,16 +264,6 @@
     <string name="format_hour_minute">%1$dh %2$dm</string>
     <string name="mute5min">Stumm schalten für 5 Minuten</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Dateiformat</string>
-    <string name="metadata_label_created_at">Erstellt am</string>
-    <string name="metadata_label_aaps_version">AAPS-Version</string>
-    <string name="metadata_label_aaps_flavour">Build-Variante</string>
-    <string name="metadata_label_device_name">Patientenname des exportierenden Geräts</string>
-    <string name="metadata_label_device_model">Modell des exportierenden Geräts</string>
-    <string name="metadata_label_encryption">Dateiverschlüsselung</string>
-    <string name="metadata_format_new">Neues verschlüsseltes Format</string>
-    <string name="metadata_format_debug">Neues Debugformat (unverschlüsselt)</string>
-    <string name="metadata_format_other">Unbekanntes Export-Format</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">Vor %1$s Tagen exportiert</string>
     <string name="exported_at" comment="at placeholder we add export date">am %1$s exportiert</string>
     <string name="exported_less_than_hour_ago">vor weniger als einer Stunde exportiert</string>
@@ -268,7 +288,6 @@
     <string name="prefdecrypt_issue_wrong_format">Fehlende Verschlüsselungskonfiguration, Einstellungsformat ist ungültig!</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Nicht unterstützter oder nicht angegebener Verschlüsselungsalgorithmus!</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Signaturprüfung</string>
     <string name="running_invalid_version">Wir haben festgestellt, dass Du eine ungültige Version verwendest. Loop deaktiviert!</string>
     <string name="versionavailable">Version %1$s ist verfügbar.</string>
     <string name="version_expire">Version %1$s läuft am %2$s ab</string>
@@ -479,6 +498,7 @@
     <string name="autotune_run_with_error">Fehler beim letzten Autotune Lauf</string>
     <string name="autotune_run_cancelled">Ein weiterer Lauf von Autotune wurde erkannt, Lauf abgebrochen</string>
     <string name="needconnectpermission">App benötigt Bluetooth-Berechtigung</string>
+    <!-- SmsCommunicator -->
     <plurals name="days">
         <item quantity="one">%1$d Tag</item>
         <item quantity="other">%1$d Tage</item>

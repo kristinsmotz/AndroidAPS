@@ -2,37 +2,46 @@ package info.nightscout.androidaps.plugins.iob.iobCobCalculator
 
 import androidx.collection.LongSparseArray
 import dagger.android.HasAndroidInjector
-import info.nightscout.androidaps.Constants
+import info.nightscout.interfaces.Constants
 import info.nightscout.androidaps.R
 import info.nightscout.androidaps.annotations.OpenForTesting
 import info.nightscout.androidaps.data.IobTotal
-import info.nightscout.androidaps.data.MealData
+import info.nightscout.interfaces.data.MealData
 import info.nightscout.androidaps.database.AppRepository
 import info.nightscout.androidaps.database.ValueWrapper
 import info.nightscout.androidaps.database.entities.Bolus
 import info.nightscout.androidaps.database.entities.ExtendedBolus
 import info.nightscout.androidaps.database.entities.TemporaryBasal
 import info.nightscout.androidaps.database.interfaces.end
-import info.nightscout.androidaps.events.*
+import info.nightscout.androidaps.events.EventEffectiveProfileSwitchChanged
+import info.nightscout.androidaps.events.EventNewBG
+import info.nightscout.androidaps.events.EventNewHistoryData
+import info.nightscout.androidaps.events.EventPreferenceChange
 import info.nightscout.androidaps.extensions.convertedToAbsolute
 import info.nightscout.androidaps.extensions.iobCalc
 import info.nightscout.androidaps.extensions.toTemporaryBasal
-import info.nightscout.androidaps.interfaces.*
-import info.nightscout.androidaps.plugins.bus.RxBus
+import info.nightscout.androidaps.interfaces.ActivePlugin
+import info.nightscout.androidaps.interfaces.IobCobCalculator
+import info.nightscout.androidaps.interfaces.PluginBase
+import info.nightscout.interfaces.PluginDescription
+import info.nightscout.interfaces.PluginType
+import info.nightscout.androidaps.interfaces.Profile
+import info.nightscout.androidaps.interfaces.ProfileFunction
+import info.nightscout.shared.interfaces.ResourceHelper
 import info.nightscout.androidaps.plugins.general.overview.OverviewData
 import info.nightscout.androidaps.plugins.iob.iobCobCalculator.data.AutosensData
-import info.nightscout.androidaps.plugins.iob.iobCobCalculator.events.EventNewHistoryData
-import info.nightscout.androidaps.utils.DateUtil
+import info.nightscout.shared.utils.DateUtil
 import info.nightscout.androidaps.utils.DecimalFormatter
 import info.nightscout.androidaps.utils.FabricPrivacy
-import info.nightscout.androidaps.utils.T
-import info.nightscout.androidaps.interfaces.ResourceHelper
-import info.nightscout.androidaps.utils.rx.AapsSchedulers
+import info.nightscout.interfaces.utils.MidnightTime
+import info.nightscout.shared.utils.T
 import info.nightscout.androidaps.workflow.CalculationWorkflow
-import info.nightscout.androidaps.events.Event
-import info.nightscout.androidaps.utils.MidnightTime
-import info.nightscout.shared.logging.AAPSLogger
-import info.nightscout.shared.logging.LTag
+import info.nightscout.rx.AapsSchedulers
+import info.nightscout.rx.bus.RxBus
+import info.nightscout.rx.events.Event
+import info.nightscout.rx.events.EventConfigBuilderChange
+import info.nightscout.rx.logging.AAPSLogger
+import info.nightscout.rx.logging.LTag
 import info.nightscout.shared.sharedPreferences.SP
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
@@ -42,7 +51,6 @@ import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
@@ -439,23 +447,6 @@ class IobCobCalculatorPlugin @Inject constructor(
             array.put(iobArray[i].determineBasalJson(dateUtil))
         }
         return array
-    }
-
-    companion object {
-
-        // From https://gist.github.com/IceCreamYou/6ffa1b18c4c8f6aeaad2
-        // Returns the value at a given percentile in a sorted numeric array.
-        // "Linear interpolation between closest ranks" method
-        fun percentile(arr: Array<Double>, p: Double): Double {
-            if (arr.isEmpty()) return 0.0
-            if (p <= 0) return arr[0]
-            if (p >= 1) return arr[arr.size - 1]
-            val index = arr.size * p
-            val lower = floor(index)
-            val upper = lower + 1
-            val weight = index % 1
-            return if (upper >= arr.size) arr[lower.toInt()] else arr[lower.toInt()] * (1 - weight) + arr[upper.toInt()] * weight
-        }
     }
 
     /**

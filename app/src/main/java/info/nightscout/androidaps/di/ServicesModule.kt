@@ -2,12 +2,12 @@ package info.nightscout.androidaps.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import info.nightscout.androidaps.plugins.general.nsclient.services.NSClientService
+import info.nightscout.androidaps.plugins.sync.nsclient.services.NSClientService
 import info.nightscout.androidaps.plugins.general.overview.notifications.DismissNotificationService
 import info.nightscout.androidaps.plugins.general.persistentNotification.DummyService
 import info.nightscout.androidaps.plugins.general.wear.wearintegration.DataLayerListenerServiceMobile
 import info.nightscout.androidaps.services.AlarmSoundService
-import info.nightscout.androidaps.services.LocationService
+import info.nightscout.automation.services.LocationService
 
 @Module
 @Suppress("unused")

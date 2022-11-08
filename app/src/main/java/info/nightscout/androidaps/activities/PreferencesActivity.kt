@@ -9,7 +9,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
 import info.nightscout.androidaps.R
 import info.nightscout.androidaps.databinding.ActivityPreferencesBinding
-import info.nightscout.androidaps.utils.locale.LocaleHelper
+import info.nightscout.interfaces.locale.LocaleHelper
 
 class PreferencesActivity : NoSplashAppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
 
@@ -72,6 +72,7 @@ class PreferencesActivity : NoSplashAppCompatActivity(), PreferenceFragmentCompa
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             android.R.id.home -> {
+                @Suppress("DEPRECATION")
                 onBackPressed()
                 true
             }

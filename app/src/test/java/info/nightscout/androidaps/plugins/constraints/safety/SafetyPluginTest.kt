@@ -2,7 +2,7 @@ package info.nightscout.androidaps.plugins.constraints.safety
 
 import dagger.android.AndroidInjector
 import dagger.android.HasAndroidInjector
-import info.nightscout.androidaps.Constants
+import info.nightscout.interfaces.Constants
 import info.nightscout.androidaps.R
 import info.nightscout.androidaps.TestBaseWithProfile
 import info.nightscout.androidaps.database.AppRepository
@@ -12,12 +12,12 @@ import info.nightscout.androidaps.interfaces.PumpDescription
 import info.nightscout.androidaps.plugins.aps.openAPSAMA.OpenAPSAMAPlugin
 import info.nightscout.androidaps.plugins.aps.openAPSSMB.OpenAPSSMBPlugin
 import info.nightscout.androidaps.plugins.aps.openAPSSMBDynamicISF.OpenAPSSMBDynamicISFPlugin
-import info.nightscout.androidaps.plugins.configBuilder.ConstraintChecker
+import info.nightscout.androidaps.interfaces.Constraints
 import info.nightscout.androidaps.plugins.pump.virtual.VirtualPumpPlugin
 import info.nightscout.androidaps.plugins.sensitivity.SensitivityOref1Plugin
 import info.nightscout.androidaps.plugins.source.GlimpPlugin
 import info.nightscout.androidaps.utils.HardLimits
-import info.nightscout.androidaps.interfaces.BuildHelper
+import info.nightscout.interfaces.BuildHelper
 import info.nightscout.shared.sharedPreferences.SP
 import org.junit.Assert
 import org.junit.Before
@@ -28,7 +28,7 @@ import org.mockito.Mockito.`when`
 class SafetyPluginTest : TestBaseWithProfile() {
 
     @Mock lateinit var sp: SP
-    @Mock lateinit var constraintChecker: ConstraintChecker
+    @Mock lateinit var constraintChecker: Constraints
     @Mock lateinit var openAPSAMAPlugin: OpenAPSAMAPlugin
     @Mock lateinit var openAPSSMBPlugin: OpenAPSSMBPlugin
     @Mock lateinit var openAPSSMBDynamicISFPlugin: OpenAPSSMBDynamicISFPlugin
@@ -103,7 +103,7 @@ class SafetyPluginTest : TestBaseWithProfile() {
 
     @Test fun notEnabledSMBInPreferencesDisablesSMB() {
         `when`(sp.getBoolean(R.string.key_use_smb, false)).thenReturn(false)
-        `when`(constraintChecker.isClosedLoopAllowed()).thenReturn(Constraint(true))
+        `when`(constraintChecker.isClosedLoopAllowed(anyObject())).thenReturn(Constraint(true))
         var c = Constraint(true)
         c = safetyPlugin.isSMBModeEnabled(c)
         Assert.assertTrue(c.getReasons(aapsLogger).contains("SMB disabled in preferences"))
@@ -112,7 +112,7 @@ class SafetyPluginTest : TestBaseWithProfile() {
 
     @Test fun openLoopPreventsSMB() {
         `when`(sp.getBoolean(R.string.key_use_smb, false)).thenReturn(true)
-        `when`(constraintChecker.isClosedLoopAllowed()).thenReturn(Constraint(false))
+        `when`(constraintChecker.isClosedLoopAllowed(anyObject())).thenReturn(Constraint(false))
         var c = Constraint(true)
         c = safetyPlugin.isSMBModeEnabled(c)
         Assert.assertTrue(c.getReasons(aapsLogger).contains("SMB not allowed in open loop mode"))

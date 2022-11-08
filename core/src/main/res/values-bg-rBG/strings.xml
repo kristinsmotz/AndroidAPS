@@ -47,6 +47,7 @@
     <string name="isf_label">ISF (Инс.чувствителност):</string>
     <string name="basal_label">Базал</string>
     <string name="target_label">Целeва КЗ:</string>
+    <string name="basal_long_label">Базал</string>
     <string name="initializing">Инициализация ...</string>
     <string name="serialnumber">Сериен номер</string>
     <string name="battery_label">Батерия</string>
@@ -105,6 +106,28 @@
     <string name="remove_button">Изтрий</string>
     <string name="addnew">Добави нов</string>
     <string name="wrong_pump_data">Данните идват от различна помпа. Сменете драйвера на помпата и за да възстановите състоянието на помпата.</string>
+    <string name="bg_label">КЗ</string>
+    <string name="calibration">Калибрация</string>
+    <string name="alarminxmin">Сларма след %1$d мин</string>
+    <string name="treatmentdeliveryerror">Грешка в болуса. Сам провери истинската стойност на доставения инсулин</string>
+    <string name="bolus_reminder">Болус подсещане</string>
+    <string name="duration_label">Продължителност</string>
+    <string name="shortgramm">гр.</string>
+    <string name="pumpsuspended">Помпата е спряна</string>
+    <string name="notconfigured">Не е конфигуриран</string>
+    <string name="loopsuspended">Loop изключен</string>
+    <string name="trend_arrow">Стрелка тенденция</string>
+    <string name="value_unavailable_short">---</string>
+    <string name="required">нужн</string>
+    <string name="average">Средно</string>
+    <string name="tir">Време в границите</string>
+    <string name="tdd_total">ТДД общо</string>
+    <string name="none"><![CDATA[<празно>]]></string>
+    <string name="remove_label">ИЗТРИИ</string>
+    <string name="activate_profile">Активирай профила</string>
+    <string name="reset">нулиране</string>
+    <string name="profileswitch_ismissing">Смяната на профила не е отразена. Моля, направете превключване на потребителския профил или натиснете \"Активирай профил\" в Локален профил.</string>
+    <string name="profile">Профил</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">Ограничаване на макс. базална стойност до %1$.2f Е/ч поради %2$s</string>
     <string name="pumplimit">лимит на помпата</string>
@@ -224,16 +247,6 @@
     <string name="format_hour_minute">%1$dч:%2$dм</string>
     <string name="mute5min">Изключи за 5 минути</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Формат на файла</string>
-    <string name="metadata_label_created_at">Създаден на</string>
-    <string name="metadata_label_aaps_version">Версия на AAPS</string>
-    <string name="metadata_label_aaps_flavour">вариант</string>
-    <string name="metadata_label_device_name">Име на пациента</string>
-    <string name="metadata_label_device_model">Модел на телефона:</string>
-    <string name="metadata_label_encryption">Криптиране</string>
-    <string name="metadata_format_new">Нов формат</string>
-    <string name="metadata_format_debug">Нов формат (незащитен)</string>
-    <string name="metadata_format_other">Непознат формат</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">от преди %1$s</string>
     <string name="exported_at" comment="at placeholder we add export date">от %1$s</string>
     <string name="exported_less_than_hour_ago">от преди по-малко от час</string>
@@ -258,7 +271,6 @@
     <string name="prefdecrypt_issue_wrong_format">Липсва конфигурация на шифроване, форматът на настройките е невалиден!</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Неподдържан или непотвърден алгоритъм за криптиране!</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Проверка на подпис</string>
     <string name="running_invalid_version">Използвате грешна версия. APS е изключен!</string>
     <string name="versionavailable">Има налично обновяване до версия %1$s </string>
     <!-- Permissions -->
@@ -280,9 +292,17 @@
     <string name="valuelimitedto">%1$.2f ограничен до %2$.2f</string>
     <!-- Command Queue + readStatus reasons -->
     <string name="sms" comment="26 characters max for translation">SMS</string>
+    <string name="formatPercent">%1$.0f %%</string>
     <string name="basal">Базал</string>
+    <string name="basalpct">Базал %</string>
+    <string name="a11y_user">потребител</string>
     <!-- Autotune -->
+    <string name="autotune_result">Резултат: %1$s</string>
+    <string name="autotune_missing">Липсва</string>
+    <string name="autotune_compare_profile">Сравняване на профили</string>
     <string name="needconnectpermission">Апликацията изисква разрешение за bluetooth</string>
+    <!-- SmsCommunicator -->
+    <string name="smscommunicator_missingsmspermission">SMS команда забранена</string>
     <plurals name="days">
         <item quantity="one">%1$d дeн</item>
         <item quantity="other">%1$d дни</item>

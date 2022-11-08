@@ -8,22 +8,22 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import dagger.android.support.DaggerDialogFragment
-import info.nightscout.androidaps.activities.BolusProgressHelperActivity
+import info.nightscout.androidaps.activities.DialogAppCompatActivity
 import info.nightscout.androidaps.core.R
 import info.nightscout.androidaps.core.databinding.DialogBolusprogressBinding
 import info.nightscout.androidaps.database.entities.UserEntry.Action
 import info.nightscout.androidaps.database.entities.UserEntry.Sources
 import info.nightscout.androidaps.events.EventPumpStatusChanged
 import info.nightscout.androidaps.interfaces.CommandQueue
-import info.nightscout.androidaps.interfaces.ResourceHelper
+import info.nightscout.shared.interfaces.ResourceHelper
 import info.nightscout.androidaps.logging.UserEntryLogger
-import info.nightscout.androidaps.plugins.bus.RxBus
 import info.nightscout.androidaps.plugins.general.overview.events.EventDismissBolusProgressIfRunning
-import info.nightscout.androidaps.plugins.general.overview.events.EventOverviewBolusProgress
+import info.nightscout.rx.events.EventOverviewBolusProgress
 import info.nightscout.androidaps.utils.FabricPrivacy
-import info.nightscout.androidaps.utils.rx.AapsSchedulers
-import info.nightscout.shared.logging.AAPSLogger
-import info.nightscout.shared.logging.LTag
+import info.nightscout.rx.AapsSchedulers
+import info.nightscout.rx.bus.RxBus
+import info.nightscout.rx.logging.AAPSLogger
+import info.nightscout.rx.logging.LTag
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import javax.inject.Inject
@@ -50,7 +50,7 @@ class BolusProgressDialog : DaggerDialogFragment() {
     private var amount = 0.0
     var id: Long = 0L
     private var state: String? = null
-    private var helpActivity: BolusProgressHelperActivity? = null
+    private var helpActivity: DialogAppCompatActivity? = null
 
     fun setId(id: Long): BolusProgressDialog {
         this.id = id
@@ -63,7 +63,7 @@ class BolusProgressDialog : DaggerDialogFragment() {
         return this
     }
 
-    fun setHelperActivity(activity: BolusProgressHelperActivity): BolusProgressDialog {
+    fun setHelperActivity(activity: DialogAppCompatActivity): BolusProgressDialog {
         helpActivity = activity
         return this
     }

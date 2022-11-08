@@ -2,7 +2,7 @@ package info.nightscout.androidaps.utils.userEntry
 
 import android.text.Spanned
 import dagger.Reusable
-import info.nightscout.androidaps.Constants
+import info.nightscout.interfaces.Constants
 import info.nightscout.androidaps.core.R
 import info.nightscout.androidaps.database.entities.UserEntry
 import info.nightscout.androidaps.database.entities.UserEntry.Action
@@ -12,11 +12,11 @@ import info.nightscout.androidaps.database.entities.ValueWithUnit
 import info.nightscout.androidaps.interfaces.GlucoseUnit
 import info.nightscout.androidaps.interfaces.Profile
 import info.nightscout.androidaps.interfaces.ProfileFunction
-import info.nightscout.androidaps.utils.DateUtil
+import info.nightscout.shared.utils.DateUtil
 import info.nightscout.androidaps.utils.DecimalFormatter
-import info.nightscout.androidaps.utils.HtmlHelper
+import info.nightscout.interfaces.utils.HtmlHelper
 import info.nightscout.androidaps.utils.Translator
-import info.nightscout.androidaps.interfaces.ResourceHelper
+import info.nightscout.shared.interfaces.ResourceHelper
 import javax.inject.Inject
 
 @Reusable
@@ -46,7 +46,7 @@ class UserEntryPresentationHelper @Inject constructor(
         Sources.CarbDialog          -> R.drawable.ic_cp_bolus_carbs
         Sources.WizardDialog        -> R.drawable.ic_calculator
         Sources.QuickWizard         -> R.drawable.ic_quick_wizard
-        Sources.ExtendedBolusDialog -> R.drawable.ic_actions_startextbolus
+        Sources.ExtendedBolusDialog -> R.drawable.ic_actions_start_extended_bolus
         Sources.TTDialog            -> R.drawable.ic_temptarget_high
         Sources.ProfileSwitchDialog -> R.drawable.ic_actions_profileswitch
         Sources.LoopDialog          -> R.drawable.ic_loop_closed
@@ -95,6 +95,7 @@ class UserEntryPresentationHelper @Inject constructor(
         Sources.Omnipod             -> R.drawable.ic_patch_pump_outline
         Sources.OmnipodEros         -> R.drawable.ic_patch_pump_outline
         Sources.OmnipodDash         -> R.drawable.ic_patch_pump_outline
+        Sources.EOPatch2            -> R.drawable.ic_eopatch2_128
         Sources.MDI                 -> R.drawable.ic_ict
         Sources.VirtualPump         -> R.drawable.ic_virtual_pump
         Sources.SMS                 -> R.drawable.ic_sms
@@ -211,7 +212,7 @@ class UserEntryPresentationHelper @Inject constructor(
                     bg = Profile.toUnitsString(valueWithUnit.value, valueWithUnit.value * Constants.MGDL_TO_MMOLL, profileFunction.getUnits())
 
                 is ValueWithUnit.Mmoll                 ->
-                    bg = Profile.toUnitsString(valueWithUnit.value * Constants.MMOLL_TO_MGDL, valueWithUnit.value , profileFunction.getUnits())
+                    bg = Profile.toUnitsString(valueWithUnit.value * Constants.MMOLL_TO_MGDL, valueWithUnit.value, profileFunction.getUnits())
 
                 ValueWithUnit.UNKNOWN                  -> Unit
             }

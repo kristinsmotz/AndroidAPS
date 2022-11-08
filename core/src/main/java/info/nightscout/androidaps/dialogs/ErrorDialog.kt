@@ -11,15 +11,15 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import dagger.android.support.DaggerDialogFragment
-import info.nightscout.androidaps.activities.ErrorHelperActivity
+import info.nightscout.androidaps.activities.DialogAppCompatActivity
 import info.nightscout.androidaps.core.R
 import info.nightscout.androidaps.core.databinding.DialogErrorBinding
 import info.nightscout.androidaps.database.entities.UserEntry.Action
 import info.nightscout.androidaps.database.entities.UserEntry.Sources
 import info.nightscout.androidaps.logging.UserEntryLogger
 import info.nightscout.androidaps.services.AlarmSoundServiceHelper
-import info.nightscout.androidaps.utils.T
-import info.nightscout.shared.logging.AAPSLogger
+import info.nightscout.shared.utils.T
+import info.nightscout.rx.logging.AAPSLogger
 import javax.inject.Inject
 
 class ErrorDialog : DaggerDialogFragment() {
@@ -29,7 +29,7 @@ class ErrorDialog : DaggerDialogFragment() {
     @Inject lateinit var uel: UserEntryLogger
     @Inject lateinit var ctx: Context
 
-    var helperActivity: ErrorHelperActivity? = null
+    var helperActivity: DialogAppCompatActivity? = null
     var status: String = ""
     var title: String = ""
     var sound: Int = 0

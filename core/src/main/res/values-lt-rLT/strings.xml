@@ -105,6 +105,24 @@
     <string name="remove_button">Pašalinti</string>
     <string name="addnew">Pridėti naują</string>
     <string name="wrong_pump_data">Duomenys gaunami iš kitos pompos. Pakeiskite pompos valdiklį.</string>
+    <string name="alarminxmin">Pranešti po %1$d min</string>
+    <string name="treatmentdeliveryerror">Boluso suleidimo klaida. Rankiniu būdu patikrinkite faktiškai suleistą kiekį</string>
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Pompa sustabdyta</string>
+    <string name="notconfigured">Nesukonfigūruota</string>
+    <string name="loopsuspended">Ciklas sustabdytas</string>
+    <string name="trend_arrow">Tendencijos kryptis</string>
+    <string name="value_unavailable_short">n/a</string>
+    <string name="required">reikal.</string>
+    <string name="average">Vidutinis</string>
+    <string name="tir">TIR (Laikas normos ribose)</string>
+    <string name="tdd_total">BPD viso</string>
+    <string name="none"><![CDATA[<none>]]></string>
+    <string name="remove_label">PAŠALINTI</string>
+    <string name="activate_profile">Aktyvuoti profilį</string>
+    <string name="reset">atstatyti</string>
+    <string name="profileswitch_ismissing">Neatliktas profilio keitimas. Prašome atlikti profilio keitimą arba paspausti \"Aktyvuoti profilį\" Vietinio profilio (VP) skiltyje.</string>
+    <string name="profile">Profilis</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">Ribojamas maksimalus bazės dydis%1$.2f vv/val dėl %2$s</string>
     <string name="pumplimit">pompos limitas</string>
@@ -227,16 +245,6 @@
     <string name="format_hour_minute">%1$dh %2$dm</string>
     <string name="mute5min">Nutildyti 5 minutėms</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Failo formatas</string>
-    <string name="metadata_label_created_at">Sukurta</string>
-    <string name="metadata_label_aaps_version">AAPS versija</string>
-    <string name="metadata_label_aaps_flavour">Versijos variantas</string>
-    <string name="metadata_label_device_name">Eksportuojamas paciento vardas</string>
-    <string name="metadata_label_device_model">Eksportuojamas prietaiso modelis</string>
-    <string name="metadata_label_encryption">Failo šifravimas</string>
-    <string name="metadata_format_new">Naujas šifruotas formatas</string>
-    <string name="metadata_format_debug">Naujas derinimo formatas (nešifruotas)</string>
-    <string name="metadata_format_other">Nežinomas eksporto formatas</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">eksportuota prieš %1$s</string>
     <string name="exported_at" comment="at placeholder we add export date">eksportuota %1$s</string>
     <string name="exported_less_than_hour_ago">eksportuota mažiau nei prieš valandą</string>
@@ -261,7 +269,6 @@
     <string name="prefdecrypt_issue_wrong_format">Trūksta šifravimo sąrankos parametrų, nustatymų formatas yra neteisingas!</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Nepalaikomas arba nepatikslintas šifravimo algoritmas!</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Parašo tikrinimas</string>
     <string name="running_invalid_version">Nustatyta, kad naudojate neteisingą versiją. Ciklas išjungtas!</string>
     <string name="versionavailable">Versiją %1$s jau galima naudoti</string>
     <string name="version_expire">Versija %1$s baigia galioti %2$s</string>
@@ -415,6 +422,7 @@
     <string name="basal">Valandinė bazė</string>
     <!-- Autotune -->
     <string name="needconnectpermission">Programai reikalinga Bluetooth prieigos teisė</string>
+    <!-- SmsCommunicator -->
     <plurals name="days">
         <item quantity="one">%1$d d.</item>
         <item quantity="few">%1$d d.</item>

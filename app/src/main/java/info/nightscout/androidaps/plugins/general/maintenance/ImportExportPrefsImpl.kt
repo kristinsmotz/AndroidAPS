@@ -13,7 +13,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.work.*
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
+import androidx.work.Worker
+import androidx.work.WorkerParameters
+import androidx.work.workDataOf
 import dagger.android.HasAndroidInjector
 import info.nightscout.androidaps.BuildConfig
 import info.nightscout.androidaps.R
@@ -24,28 +29,36 @@ import info.nightscout.androidaps.database.entities.UserEntry
 import info.nightscout.androidaps.database.entities.UserEntry.Action
 import info.nightscout.androidaps.database.entities.UserEntry.Sources
 import info.nightscout.androidaps.diaconn.events.EventDiaconnG8PumpLogReset
-import info.nightscout.androidaps.events.EventAppExit
-import info.nightscout.androidaps.interfaces.Config
+import info.nightscout.interfaces.AndroidPermission
+import info.nightscout.interfaces.BuildHelper
+import info.nightscout.interfaces.Config
 import info.nightscout.androidaps.interfaces.ImportExportPrefs
-import info.nightscout.androidaps.interfaces.ResourceHelper
+import info.nightscout.shared.interfaces.ResourceHelper
 import info.nightscout.androidaps.logging.UserEntryLogger
-import info.nightscout.androidaps.plugins.bus.RxBus
-import info.nightscout.androidaps.plugins.general.maintenance.formats.*
-import info.nightscout.androidaps.utils.AndroidPermission
-import info.nightscout.androidaps.utils.DateUtil
-import info.nightscout.androidaps.utils.MidnightTime
-import info.nightscout.androidaps.utils.T
+import info.nightscout.androidaps.plugins.general.maintenance.formats.EncryptedPrefsFormat
+import info.nightscout.interfaces.data.maintenance.PrefFileNotFoundError
+import info.nightscout.interfaces.data.maintenance.PrefIOError
+import info.nightscout.interfaces.data.maintenance.PrefMetadata
+import info.nightscout.interfaces.data.maintenance.Prefs
+import info.nightscout.interfaces.data.maintenance.PrefsFormat
+import info.nightscout.interfaces.data.maintenance.PrefsMetadataKey
+import info.nightscout.interfaces.data.maintenance.PrefsStatus
+import info.nightscout.shared.utils.DateUtil
+import info.nightscout.interfaces.utils.MidnightTime
+import info.nightscout.shared.utils.T
 import info.nightscout.androidaps.utils.ToastUtils
 import info.nightscout.androidaps.utils.alertDialogs.OKDialog
 import info.nightscout.androidaps.utils.alertDialogs.PrefImportSummaryDialog
 import info.nightscout.androidaps.utils.alertDialogs.TwoMessagesAlertDialog
 import info.nightscout.androidaps.utils.alertDialogs.WarningDialog
-import info.nightscout.androidaps.interfaces.BuildHelper
 import info.nightscout.androidaps.utils.protection.PasswordCheck
-import info.nightscout.androidaps.utils.storage.Storage
+import info.nightscout.interfaces.storage.Storage
 import info.nightscout.androidaps.utils.userEntry.UserEntryPresentationHelper
-import info.nightscout.shared.logging.AAPSLogger
-import info.nightscout.shared.logging.LTag
+import info.nightscout.interfaces.data.maintenance.PrefsFile
+import info.nightscout.rx.bus.RxBus
+import info.nightscout.rx.events.EventAppExit
+import info.nightscout.rx.logging.AAPSLogger
+import info.nightscout.rx.logging.LTag
 import info.nightscout.shared.sharedPreferences.SP
 import java.io.File
 import java.io.FileNotFoundException
@@ -251,13 +264,13 @@ class ImportExportPrefsImpl @Inject constructor(
                     activity, rh.gs(R.string.preferences_export_canceled)
                         + "\n\n" + rh.gs(R.string.filenotfound)
                         + ": " + e.message
-                        + "\n\n" + rh.gs(R.string.needstoragepermission)
+                        + "\n\n" + rh.gs(R.string.need_storage_permission)
                 )
                 log.error(LTag.CORE, "File system exception", e)
             } catch (e: PrefIOError) {
                 ToastUtils.Long.errorToast(
                     activity, rh.gs(R.string.preferences_export_canceled)
-                        + "\n\n" + rh.gs(R.string.needstoragepermission)
+                        + "\n\n" + rh.gs(R.string.need_storage_permission)
                         + ": " + e.message
                 )
                 log.error(LTag.CORE, "File system exception", e)

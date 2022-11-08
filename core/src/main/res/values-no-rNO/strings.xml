@@ -114,6 +114,41 @@
     <string name="addnew">Legg til ny</string>
     <string name="addnew_above">Legg til ny over</string>
     <string name="wrong_pump_data">Data kommer fra forskjellige pumper. Bytt pumpevalg for å nullstille pumpens tilstand.</string>
+    <string name="bg_label">BS</string>
+    <string name="calibration">Kalibrering</string>
+    <string name="alarminxmin">Aktiver alarm om %1$d min</string>
+    <string name="treatmentdeliveryerror">Det er registrert en feil med bolus-leveransen. Sjekk manuelt om den er levert og hvor mye</string>
+    <string name="bolus_reminder">Bolus påminnelse</string>
+    <string name="duration_label">Varighet</string>
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Pumpen er pauset</string>
+    <string name="notconfigured">Ikke konfigurert</string>
+    <string name="loopsuspended">Loop pauset</string>
+    <string name="trend_arrow">Trend pil</string>
+    <string name="a11y_autosens_label">Auto sens</string>
+    <string name="value_unavailable_short">n/a</string>
+    <string name="required">nødv</string>
+    <string name="a11y_arrow_double_down">synker raskt</string>
+    <string name="a11y_arrow_single_down">synkende</string>
+    <string name="a11y_arrow_forty_five_down">synker rolig</string>
+    <string name="a11y_arrow_flat">stabilt</string>
+    <string name="a11y_arrow_forty_five_up">stiger raskt</string>
+    <string name="a11y_arrow_single_up">stiger</string>
+    <string name="a11y_arrow_double_up">stiger raskt</string>
+    <string name="a11y_arrow_none">ingen</string>
+    <string name="a11y_arrow_unknown">ukjent</string>
+    <string name="a11y_high">høyt</string>
+    <string name="a11y_inrange">i målområdet</string>
+    <string name="a11y_low">lavt</string>
+    <string name="average">Gjennomsnitt</string>
+    <string name="tir">TIR</string>
+    <string name="tdd_total">TDD Total</string>
+    <string name="none"><![CDATA[<none>]]></string>
+    <string name="remove_label">FJERN</string>
+    <string name="activate_profile">Aktiver profil</string>
+    <string name="reset">tilbakestill</string>
+    <string name="profileswitch_ismissing">Profilbytte mangler. Utfør et profilbytte og trykk på \"Aktiver profil\" i din lokale profil.</string>
+    <string name="profile">Profil</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">Begrenser maks basal dose til %1$.2f E/t på grunn av %2$s</string>
     <string name="pumplimit">pumpebegrensning</string>
@@ -241,16 +276,6 @@
     <string name="format_hour_minute">%1$dt %2$dm</string>
     <string name="mute5min">Demp i 5 minutter</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Filformat</string>
-    <string name="metadata_label_created_at">Opprettet den</string>
-    <string name="metadata_label_aaps_version">AAPS versjon</string>
-    <string name="metadata_label_aaps_flavour">Bygge variant</string>
-    <string name="metadata_label_device_name">Eksporterer enhetens pasientnavn</string>
-    <string name="metadata_label_device_model">Eksportere enhetsmodell</string>
-    <string name="metadata_label_encryption">Fil kryptering</string>
-    <string name="metadata_format_new">Nytt krypteringsformat</string>
-    <string name="metadata_format_debug">Nytt feilsøkingsformat (ukryptert)</string>
-    <string name="metadata_format_other">Ukjent eksportformat</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">eksportert for %1$s siden</string>
     <string name="exported_at" comment="at placeholder we add export date">eksportert den %1$s</string>
     <string name="exported_less_than_hour_ago">eksportert for mindre enn time siden</string>
@@ -275,7 +300,6 @@
     <string name="prefdecrypt_issue_wrong_format">Mangler krypteringsinformasjon, formatet på innstillinger er ugyldig!</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Ugyldig eller ikke spesifisert krypteringsalgoritme!</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Verifisering av signatur</string>
     <string name="running_invalid_version">Vi har oppdaget at du kjører en ugyldig versjon. Loop deaktivert!</string>
     <string name="versionavailable">Versjon %1$s er tilgjengelig</string>
     <string name="version_expire">Versjon %1$s utløper den %2$s</string>
@@ -361,6 +385,7 @@
     <string name="uel_export_settings">EKSPORTER INNSTILLINGER</string>
     <string name="uel_import_settings">IMPORTER INNSTILLINGER</string>
     <string name="uel_reset_databases">TILBAKESTILL DATABASER</string>
+    <string name="uel_cleanup_databases">OPPRYDDING DATABASER</string>
     <string name="uel_export_databases">EKSPORTER DATABASER</string>
     <string name="uel_import_databases">IMPORTER DATABASER</string>
     <string name="uel_otp_export">OTP EKSPORT</string>
@@ -490,6 +515,8 @@
     <string name="autotune_run_with_error">Feil oppdaget under siste Autotune kjøring</string>
     <string name="autotune_run_cancelled">Autotune kjører allerede. Kjøring avbrutt</string>
     <string name="needconnectpermission">Appen trenger bluetooth tillatelse</string>
+    <!-- SmsCommunicator -->
+    <string name="smscommunicator_missingsmspermission">Mangler SMS-tillatelse</string>
     <plurals name="days">
         <item quantity="one">%1$d dag</item>
         <item quantity="other">%1$d dager</item>

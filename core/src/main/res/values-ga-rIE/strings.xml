@@ -2,6 +2,11 @@
 <resources>
     <!--    Keys-->
     <!--    General-->
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Caidéil ar fionraí</string>
+    <string name="loopsuspended">Lúb ar fionraí</string>
+    <string name="tdd_total">TDD Lomlán</string>
+    <string name="profile">Próifíl</string>
     <!--    Constraints-->
     <!--    Dialogs-->
     <!--    BlePreCheck-->
@@ -26,4 +31,5 @@
     <!-- HardLimits -->
     <!-- Command Queue + readStatus reasons -->
     <!-- Autotune -->
+    <!-- SmsCommunicator -->
 </resources>

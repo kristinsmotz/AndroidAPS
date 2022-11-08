@@ -103,6 +103,24 @@
     <string name="notes_label">Notas</string>
     <string name="remove_button">Remover</string>
     <string name="addnew">Adicionar novo</string>
+    <string name="alarminxmin">Executar alarme em %1$d min</string>
+    <string name="treatmentdeliveryerror">Ocorreu um erro de bólus. Verifique manualmente a quantidade administrada</string>
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Bomba suspensa</string>
+    <string name="notconfigured">Não configurado</string>
+    <string name="loopsuspended">Loop suspenso</string>
+    <string name="trend_arrow">Seta de tendência</string>
+    <string name="value_unavailable_short">n/a</string>
+    <string name="required">req</string>
+    <string name="average">Média</string>
+    <string name="tir">TIR</string>
+    <string name="tdd_total">TDI Total</string>
+    <string name="none"><![CDATA[<nenhum>]]></string>
+    <string name="remove_label">REMOVER</string>
+    <string name="activate_profile">Activar perfil</string>
+    <string name="reset">repor</string>
+    <string name="profileswitch_ismissing">Troca de Perfil em falta. Por favor faça uma troca de perfil ou pressione \"Activar Perfil\" em Perfil Local.</string>
+    <string name="profile">Perfil</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">A basal máx está limitada a %1$.2f U/h por %2$s</string>
     <string name="pumplimit">limite bomba</string>
@@ -213,16 +231,6 @@
     <string name="format_hour_minute">%1$dh %2$dm</string>
     <string name="mute5min">Silenciar por 5 minutos</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Formato do ficheiro</string>
-    <string name="metadata_label_created_at">Criado em</string>
-    <string name="metadata_label_aaps_version">Versão AAPS</string>
-    <string name="metadata_label_aaps_flavour">Variante de Compilação</string>
-    <string name="metadata_label_device_name">A exportar nome do paciente do dispositivo</string>
-    <string name="metadata_label_device_model">A exportar modelo do dispositivo</string>
-    <string name="metadata_label_encryption">Encriptação do Ficheiro</string>
-    <string name="metadata_format_new">Novo formato de encriptação</string>
-    <string name="metadata_format_debug">Novo formato de depuração (não encriptado)</string>
-    <string name="metadata_format_other">Formato de exportação desconhecido</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">exportado há %1$s</string>
     <string name="exported_at" comment="at placeholder we add export date">exportado às %1$s</string>
     <string name="exported_less_than_hour_ago">exportado há menos de uma hora</string>
@@ -247,7 +255,6 @@
     <string name="prefdecrypt_issue_wrong_format">Configuração de encriptação ausente, formato de definições é inválido!</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Algoritmo de encriptação não suportado ou não especificado!</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Verificador de assinatura</string>
     <string name="running_invalid_version">Detectamos que está a correr uma versão inválida. Loop desactivado!</string>
     <string name="versionavailable">Disponível %1$s disponível</string>
     <!-- Permissions -->
@@ -335,6 +342,7 @@
     <string name="basal">Basal</string>
     <!-- Autotune -->
     <string name="needconnectpermission">Aplicação precisa de permissão Bluetooth</string>
+    <!-- SmsCommunicator -->
     <plurals name="days">
         <item quantity="one">%1$d dia</item>
         <item quantity="other">%1$d dias</item>

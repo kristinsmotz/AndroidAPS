@@ -110,6 +110,36 @@
     <string name="addnew">Lägg till</string>
     <string name="addnew_above">Lägg till nytt ovan</string>
     <string name="wrong_pump_data">Data kommer från en annan pump. Byt pumpdrivrutin för att återställa.</string>
+    <string name="alarminxmin">Larma om %1$d min</string>
+    <string name="treatmentdeliveryerror">Ett fel rapporterades under bolus. Vänligen kontrollera pumpen manuellt</string>
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Pump pausad</string>
+    <string name="notconfigured">Inte konfigurerad</string>
+    <string name="loopsuspended">Loop pausad</string>
+    <string name="trend_arrow">Trendpil</string>
+    <string name="value_unavailable_short">-</string>
+    <string name="required">beh</string>
+    <string name="a11y_arrow_double_down">sjunker snabbt</string>
+    <string name="a11y_arrow_single_down">sjunker</string>
+    <string name="a11y_arrow_forty_five_down">sjunker långsamt</string>
+    <string name="a11y_arrow_flat">stabilt</string>
+    <string name="a11y_arrow_forty_five_up">stiger långsamt</string>
+    <string name="a11y_arrow_single_up">stiger</string>
+    <string name="a11y_arrow_double_up">stiger snabbt</string>
+    <string name="a11y_arrow_none">ingen</string>
+    <string name="a11y_arrow_unknown">okänd</string>
+    <string name="a11y_high">hög</string>
+    <string name="a11y_inrange">inom målområdet</string>
+    <string name="a11y_low">låg</string>
+    <string name="average">Medel</string>
+    <string name="tir">TIR</string>
+    <string name="tdd_total">TDD totalt</string>
+    <string name="none"><![CDATA[<ingen>]]></string>
+    <string name="remove_label">TA BORT</string>
+    <string name="activate_profile">Aktivera profil</string>
+    <string name="reset">Återställ</string>
+    <string name="profileswitch_ismissing">Profilbyte saknas. Vänligen gör ett profilbyte eller tryck Aktivera profil under Lokal Profil.</string>
+    <string name="profile">Profil</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">Max basal: %1$.2f E/h pga %2$s</string>
     <string name="pumplimit">pumpbegränsning</string>
@@ -232,16 +262,6 @@
     <string name="format_hour_minute">%1$dh %2$dm</string>
     <string name="mute5min">Tysta i 5 minuter</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Filformat</string>
-    <string name="metadata_label_created_at">Skapad</string>
-    <string name="metadata_label_aaps_version">AAPS-version</string>
-    <string name="metadata_label_aaps_flavour">Build-variant</string>
-    <string name="metadata_label_device_name">Exporterar patientens namn</string>
-    <string name="metadata_label_device_model">Exporterar enhetsmodell</string>
-    <string name="metadata_label_encryption">· Filkryptering</string>
-    <string name="metadata_format_new">Nytt krypterat format</string>
-    <string name="metadata_format_debug">Nytt debug-format (okrypterat)</string>
-    <string name="metadata_format_other">Okänt exportformat</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">exporterades för %1$s sedan</string>
     <string name="exported_at" comment="at placeholder we add export date">exporterades %1$s</string>
     <string name="exported_less_than_hour_ago">exporterades för mindre än timme sedan</string>
@@ -266,7 +286,6 @@
     <string name="prefdecrypt_issue_wrong_format">Krypteringskonfigurationen saknas. Inställningsformatet är ogiltigt!</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Ej stödd eller ej angiven krypteringsalgoritm!</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Signaturverifierare</string>
     <string name="running_invalid_version">Du kör en ogiltig version. Loop avstängd!</string>
     <string name="versionavailable">Version %1$s tillgänglig</string>
     <string name="version_expire">Version %1$s upphör att gälla %2$s</string>
@@ -422,6 +441,7 @@
     <string name="basal">Basal</string>
     <!-- Autotune -->
     <string name="needconnectpermission">Applikationen behöver bluetooth-behörighet</string>
+    <!-- SmsCommunicator -->
     <plurals name="days">
         <item quantity="one">%1$d dag</item>
         <item quantity="other">%1$d dagar</item>

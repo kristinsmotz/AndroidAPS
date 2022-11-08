@@ -114,6 +114,50 @@
     <string name="addnew">Ajouter</string>
     <string name="addnew_above">Ajouter le nouveau au-dessus</string>
     <string name="wrong_pump_data">Les données proviennent de différentes pompes. Changer le pilote de la pompe pour réinitialiser l\'état de la pompe.</string>
+    <string name="bg_label">Gly</string>
+    <string name="calibration">Étalonnage</string>
+    <string name="alarminxmin">Alerter dans %1$d min</string>
+    <string name="treatmentdeliveryerror">Erreur lors du Bolus. Vérifiez manuellement la quantité réellement injectée</string>
+    <string name="bolus_reminder">Rappel bolus</string>
+    <string name="duration_label">Durée</string>
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Pompe arrêtée</string>
+    <string name="notconfigured">Non configuré</string>
+    <string name="loopsuspended">La Boucle est suspendue</string>
+    <string name="trend_arrow">Flèche de tendance</string>
+    <string name="a11y_autosens_label">Auto sens</string>
+    <string name="value_unavailable_short">n/d</string>
+    <string name="required">requis</string>
+    <string name="a11y_arrow_double_down">en baisse rapide</string>
+    <string name="a11y_arrow_single_down">en baisse</string>
+    <string name="a11y_arrow_forty_five_down">en baisse lente</string>
+    <string name="a11y_arrow_flat">stable</string>
+    <string name="a11y_arrow_forty_five_up">en hausse lente</string>
+    <string name="a11y_arrow_single_up">en hausse</string>
+    <string name="a11y_arrow_double_up">en hausse rapide</string>
+    <string name="a11y_arrow_none">aucun</string>
+    <string name="a11y_arrow_unknown">inconnu</string>
+    <string name="a11y_high">haut</string>
+    <string name="a11y_inrange">dans la cible</string>
+    <string name="a11y_low">bas</string>
+    <string name="average">Moyenne</string>
+    <string name="tir">TIR</string>
+    <string name="tdd_total">DTI Total</string>
+    <string name="none"><![CDATA[<aucun>]]></string>
+    <string name="remove_label">SUPPRIMER</string>
+    <string name="activate_profile">Activer le profil</string>
+    <string name="reset">réinitialiser</string>
+    <string name="profileswitch_ismissing">ProfileSwitch manquant. S’il vous plaît faire un changement de profil ou appuyez sur « Activer le profil » dans le LocalProfile.</string>
+    <string name="profile">Profil</string>
+    <string name="select_for_removal">Sélectionner pour suppression</string>
+    <string name="confirm_remove_multiple_items">Êtes-vous sûr de vouloir supprimer %1$d entrée(s)</string>
+    <string name="overview_treatment_label">Traitement</string>
+    <string name="copytolocalprofile">Créer un nouveau profil à partir de ce profil ?</string>
+    <string name="wear_wizard_settings">Paramètres assistant</string>
+    <string name="bg_trend_label">Delta 15 min</string>
+    <string name="treatments_wizard_cob_label">GA</string>
+    <string name="bolus_iob_label">IA Bolus</string>
+    <string name="treatments_wizard_basaliob_label">IA Basal</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">Limiter le débit de basal max à %1$.2f U/h à cause de %2$s</string>
     <string name="pumplimit">Limite de la pompe</string>
@@ -241,16 +285,6 @@
     <string name="format_hour_minute">%1$dh%2$dm</string>
     <string name="mute5min">Muet pendant 5 minutes</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Format de fichier</string>
-    <string name="metadata_label_created_at">Créé le</string>
-    <string name="metadata_label_aaps_version">Version d\'AAPS</string>
-    <string name="metadata_label_aaps_flavour">Variante de Build</string>
-    <string name="metadata_label_device_name">Export du nom du patient de l\'appareil</string>
-    <string name="metadata_label_device_model">Export du modèle de l\'appareil</string>
-    <string name="metadata_label_encryption">Cryptage du fichier</string>
-    <string name="metadata_format_new">Nouveau format crypté</string>
-    <string name="metadata_format_debug">Nouveau format de débug (non crypté)</string>
-    <string name="metadata_format_other">Format d\'export inconnu</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">exporté il y a %1$s</string>
     <string name="exported_at" comment="at placeholder we add export date">exporté à %1$s</string>
     <string name="exported_less_than_hour_ago">exporté il y a moins d\'une heure</string>
@@ -275,7 +309,6 @@
     <string name="prefdecrypt_issue_wrong_format">Configuration du cryptage manquant, format des paramètres invalide !</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Algorithme de cryptage non pris en charge ou non spécifié !</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Vérificateur de signature</string>
     <string name="running_invalid_version">Nous avons détecté que vous utilisez une version invalide. Boucle désactivée !</string>
     <string name="versionavailable">Version %1$s disponible</string>
     <string name="version_expire">La version %1$s expire le %2$s</string>
@@ -491,6 +524,8 @@
     <string name="autotune_run_with_error">Erreur lors de la dernière exécution d\'Autotune</string>
     <string name="autotune_run_cancelled">Une autre exécution d\'Autotune est détectée, l\'exécution est annulée</string>
     <string name="needconnectpermission">L\'application a besoin de l\'autorisation Bluetooth</string>
+    <!-- SmsCommunicator -->
+    <string name="smscommunicator_missingsmspermission">Autorisation SMS manquante</string>
     <plurals name="days">
         <item quantity="one">%1$d jour</item>
         <item quantity="other">%1$d jours</item>

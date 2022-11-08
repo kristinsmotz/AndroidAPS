@@ -114,6 +114,41 @@
     <string name="addnew">Přidat nový</string>
     <string name="addnew_above">Přidat novou nad</string>
     <string name="wrong_pump_data">Data přicházejí z jiné pumpy. Změňte ovladač pro obnovení stavu pumpy.</string>
+    <string name="bg_label">Gly</string>
+    <string name="calibration">Kalibrace</string>
+    <string name="alarminxmin">Spustit alarm za %1$d min</string>
+    <string name="treatmentdeliveryerror">Podání bolusu skončilo chybou. Ručně zkontrolujte, kolik inzulinu se skutečně vydalo.</string>
+    <string name="bolus_reminder">Připomenutí bolusu</string>
+    <string name="duration_label">Trvání</string>
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Pumpa pozastavena</string>
+    <string name="notconfigured">Není nakonfigurováno</string>
+    <string name="loopsuspended">Smyčka pozastavena</string>
+    <string name="trend_arrow">Šipka trendu</string>
+    <string name="a11y_autosens_label">Automatická detekce senzitivity</string>
+    <string name="value_unavailable_short">n/a</string>
+    <string name="required">pož</string>
+    <string name="a11y_arrow_double_down">rychle klesající</string>
+    <string name="a11y_arrow_single_down">klesající</string>
+    <string name="a11y_arrow_forty_five_down">pomalu klesající</string>
+    <string name="a11y_arrow_flat">stabilní</string>
+    <string name="a11y_arrow_forty_five_up">pomalu stoupající</string>
+    <string name="a11y_arrow_single_up">stoupající</string>
+    <string name="a11y_arrow_double_up">rychle stoupající</string>
+    <string name="a11y_arrow_none">žádný</string>
+    <string name="a11y_arrow_unknown">neznámý</string>
+    <string name="a11y_high">vysoká</string>
+    <string name="a11y_inrange">v rozsahu</string>
+    <string name="a11y_low">nízká</string>
+    <string name="average">Průměr</string>
+    <string name="tir">Čas v rozsahu</string>
+    <string name="tdd_total">CDD celkem</string>
+    <string name="none"><![CDATA[<prázdný>]]></string>
+    <string name="remove_label">ODSTRANIT</string>
+    <string name="activate_profile">Aktivovat profil</string>
+    <string name="reset">Resetovat</string>
+    <string name="profileswitch_ismissing">Přepnutí profilu chybí. Proveďte přepnutí profilu nebo ho aktivujte na záložce lokálního profilu.</string>
+    <string name="profile">Profil</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">Max bazál omezen na %1$.2f U/h: %2$s</string>
     <string name="pumplimit">limit pumpy</string>
@@ -241,16 +276,6 @@
     <string name="format_hour_minute">%1$dh %2$dm</string>
     <string name="mute5min">Ztlumit na 5 minut</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Formát souboru</string>
-    <string name="metadata_label_created_at">Vytvořeno</string>
-    <string name="metadata_label_aaps_version">Verze AAPS</string>
-    <string name="metadata_label_aaps_flavour">Varianta sestavení</string>
-    <string name="metadata_label_device_name">Jméno pacienta použité při exportu</string>
-    <string name="metadata_label_device_model">Model zaříení použitý při exportu</string>
-    <string name="metadata_label_encryption">Šifrování souboru</string>
-    <string name="metadata_format_new">Nový zašifrovaný formát</string>
-    <string name="metadata_format_debug">Nový formát pro ladění (nešifrovaný)</string>
-    <string name="metadata_format_other">Neznámý formát souboru</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">exportováno před %1$s</string>
     <string name="exported_at" comment="at placeholder we add export date">exportováno v %1$s</string>
     <string name="exported_less_than_hour_ago">exportováno před méně než hodinou</string>
@@ -275,7 +300,6 @@
     <string name="prefdecrypt_issue_wrong_format">Chybí konfigurace šifrování, formát nastavení je neplatný!</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Nepodporovaný nebo neurčený šifrovací algoritmus!</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Ověření podpisu</string>
     <string name="running_invalid_version">Zjistili jsme, že používáte neplatnou verzi, smyčka zakázána!</string>
     <string name="versionavailable">Verze %1$s je k dispozici</string>
     <string name="version_expire">Platnost verze %1$s vyprší dne %2$s</string>
@@ -361,6 +385,7 @@
     <string name="uel_export_settings">EXPORTOVAT NASTAVENÍ</string>
     <string name="uel_import_settings">IMPORTOVAT NASTAVENÍ</string>
     <string name="uel_reset_databases">RESETOVAT DATABÁZE</string>
+    <string name="uel_cleanup_databases">VYČISTIT DATABÁZE</string>
     <string name="uel_export_databases">EXPORTOVAT DATABÁZE</string>
     <string name="uel_import_databases">IMPORTOVAT DATABÁZE</string>
     <string name="uel_otp_export">EXPORT OTP</string>
@@ -490,6 +515,8 @@
     <string name="autotune_run_with_error">Chyba při posledním spuštění Autotune</string>
     <string name="autotune_run_cancelled">Byla zjištěna jiná běžící úloha Autotune, spuštění zrušeno</string>
     <string name="needconnectpermission">Aplikace potřebuje oprávnění bluetooth</string>
+    <!-- SmsCommunicator -->
+    <string name="smscommunicator_missingsmspermission">Chybějící povolení SMS</string>
     <plurals name="days">
         <item quantity="one">%1$d den</item>
         <item quantity="few">%1$d dnů</item>

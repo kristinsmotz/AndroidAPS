@@ -20,6 +20,7 @@
     <string name="disconnected">Disconnesso</string>
     <string name="disconnecting">Disconnessione</string>
     <string name="waiting_for_disconnection">In attesa della disconnessione</string>
+    <string name="androidaps_start">AAPS avviato</string>
     <string name="formatinsulinunits1">%1$.1f U</string>
     <string name="formatinsulinunits">%1$.2f U</string>
     <string name="formatsignedinsulinunits">%1$+.2f U</string>
@@ -113,6 +114,36 @@
     <string name="addnew">Aggiungi nuovo</string>
     <string name="addnew_above">Aggiungi nuovo sopra</string>
     <string name="wrong_pump_data">I dati arrivano da un micro differente. Cambia il driver del micro per resettarne lo stato.</string>
+    <string name="alarminxmin">Esegui allarme in %1$d min</string>
+    <string name="treatmentdeliveryerror">Segnalato errore sul bolo. Controlla manualmente la reale quantità erogata</string>
+    <string name="shortgramm">g</string>
+    <string name="pumpsuspended">Micro sospeso</string>
+    <string name="notconfigured">Non configurato</string>
+    <string name="loopsuspended">Loop sospeso</string>
+    <string name="trend_arrow">Freccia trend</string>
+    <string name="value_unavailable_short">n/a</string>
+    <string name="required">ric</string>
+    <string name="a11y_arrow_double_down">discesa rapida</string>
+    <string name="a11y_arrow_single_down">discesa</string>
+    <string name="a11y_arrow_forty_five_down">discesa lenta</string>
+    <string name="a11y_arrow_flat">stabile</string>
+    <string name="a11y_arrow_forty_five_up">salita lenta</string>
+    <string name="a11y_arrow_single_up">salita</string>
+    <string name="a11y_arrow_double_up">salita rapida</string>
+    <string name="a11y_arrow_none">nessuno</string>
+    <string name="a11y_arrow_unknown">sconosciuto</string>
+    <string name="a11y_high">alto</string>
+    <string name="a11y_inrange">in range</string>
+    <string name="a11y_low">basso</string>
+    <string name="average">Media</string>
+    <string name="tir">TIR</string>
+    <string name="tdd_total">TDD totale</string>
+    <string name="none"><![CDATA[<none>]]></string>
+    <string name="remove_label">RIMUOVI</string>
+    <string name="activate_profile">Attiva profilo</string>
+    <string name="reset">reset</string>
+    <string name="profileswitch_ismissing">Nessun cambio profilo. Effettua un cambio profilo o premi \"Attiva profilo\" nella sezione Profilo locale.</string>
+    <string name="profile">Profilo</string>
     <!--    Constraints-->
     <string name="limitingbasalratio">Limitazione max velocità basale a %1$.2f U/h a causa di: %2$s</string>
     <string name="pumplimit">limite micro</string>
@@ -240,16 +271,6 @@
     <string name="format_hour_minute">%1$dh %2$dm</string>
     <string name="mute5min">Muto per 5 minuti</string>
     <!-- Maintenance -->
-    <string name="metadata_label_format">Formato file</string>
-    <string name="metadata_label_created_at">Creato:</string>
-    <string name="metadata_label_aaps_version">Versione AAPS</string>
-    <string name="metadata_label_aaps_flavour">Variante build</string>
-    <string name="metadata_label_device_name">Esportazione nome dispositivo paziente</string>
-    <string name="metadata_label_device_model">Esportazione modello dispositivo</string>
-    <string name="metadata_label_encryption">Crittografia file</string>
-    <string name="metadata_format_new">Nuovo formato crittografato</string>
-    <string name="metadata_format_debug">Nuovo formato di debug (non crittografato)</string>
-    <string name="metadata_format_other">Formato esportazione sconosciuto</string>
     <string name="exported_ago" comment="at placeholder we add pluralized number of hours/minutes">esportato %1$s fa</string>
     <string name="exported_at" comment="at placeholder we add export date">esportato: %1$s</string>
     <string name="exported_less_than_hour_ago">esportato meno di un\'ora fa</string>
@@ -274,11 +295,11 @@
     <string name="prefdecrypt_issue_wrong_format">Configurazione crittografia mancante, il formato delle impostazioni non è valido!</string>
     <string name="prefdecrypt_issue_wrong_algorithm">Algoritmo di crittografia non supportato o non specificato!</string>
     <!-- VersionChecker -->
-    <string name="signature_verifier">Verificatore firma</string>
     <string name="running_invalid_version">Abbiamo rilevato che stai eseguendo una versione non valida. Loop disabilitato!</string>
     <string name="versionavailable">Versione %1$s disponibile</string>
     <string name="version_expire">Versione: %1$s | Scadenza: %2$s</string>
     <!-- Permissions -->
+    <string name="alert_dialog_storage_permission_text">Riavvia il tuo telefono oppure fai ripartire AndroidAPS dalle impostazioni di sistema \naltrimenti Android APS non farà il log (è importante monitorare e verificare che gli algoritmi stiano funzionando correttamente)!</string>
     <!-- WeekdayPicker -->
     <string name="monday_short">L</string>
     <string name="tuesday_short">M</string>
@@ -359,6 +380,7 @@
     <string name="uel_export_settings">ESPORTA IMPOSTAZIONI</string>
     <string name="uel_import_settings">IMPORTA IMPOSTAZIONI</string>
     <string name="uel_reset_databases">RESETTA DATABASE</string>
+    <string name="uel_cleanup_databases">PULIZIA DATABASE</string>
     <string name="uel_export_databases">ESPORTA DATABASE</string>
     <string name="uel_import_databases">IMPORTA DATABASE</string>
     <string name="uel_otp_export">ESPORTAZIONE OTP</string>
@@ -395,6 +417,7 @@
     <string name="valueoutofrange">»%1$s« è fuori dai limiti consentiti</string>
     <string name="value_out_of_hard_limits">»%1$s« %2$.2f è fuori dai limiti consentiti</string>
     <string name="basal_value">Valore basale</string>
+    <string name="nsclient_version_does_not_match">La versione di AAPSClient non corrisponde alla versione di AAPS. Aggiorna.</string>
     <!-- Command Queue + readStatus reasons -->
     <string name="bolus_u_min">BOLO %1$.2f U</string>
     <string name="carbs_g">CHO %1$d g</string>
@@ -482,9 +505,12 @@
     <string name="autotune_update_local_profile_message">Aggiornare il profilo %1$s con il profilo Autotune?</string>
     <string name="autotune_revert_local_profile_message">Ripristinare il profilo %1$s con il profilo di input?</string>
     <string name="autotune_profile_invalid">Profilo non valido</string>
+    <string name="autotune_run_without_autoswitch">Autotune eseguito senza cambio profilo</string>
+    <string name="autotune_run_with_autoswitch">Autotune eseguito e profilo cambiato automaticamente</string>
     <string name="autotune_run_with_error">Errore durante l\'ultima esecuzione di Autotune</string>
     <string name="autotune_run_cancelled">È stata rilevata un\'altra esecuzione di Autotune, esecuzione annullata</string>
     <string name="needconnectpermission">L\'applicazione richiede l\'autorizzazione bluetooth</string>
+    <!-- SmsCommunicator -->
     <plurals name="days">
         <item quantity="one">%1$d giorno</item>
         <item quantity="other">%1$d giorni</item>
