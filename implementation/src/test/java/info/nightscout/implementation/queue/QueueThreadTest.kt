@@ -6,22 +6,21 @@ import dagger.android.AndroidInjector
 import dagger.android.HasAndroidInjector
 import info.nightscout.androidaps.TestBaseWithProfile
 import info.nightscout.androidaps.TestPumpPlugin
-import info.nightscout.androidaps.database.AppRepository
-import info.nightscout.androidaps.interfaces.ActivePlugin
-import info.nightscout.interfaces.ActivityNames
-import info.nightscout.interfaces.AndroidPermission
-import info.nightscout.interfaces.BuildHelper
-import info.nightscout.androidaps.interfaces.Constraint
-import info.nightscout.androidaps.interfaces.PumpDescription
-import info.nightscout.androidaps.interfaces.PumpSync
-import info.nightscout.androidaps.interfaces.Constraints
-import info.nightscout.androidaps.queue.commands.Command
-import info.nightscout.implementation.R
+import info.nightscout.database.impl.AppRepository
 import info.nightscout.implementation.queue.commands.CommandTempBasalAbsolute
+import info.nightscout.interfaces.AndroidPermission
+import info.nightscout.interfaces.constraints.Constraint
+import info.nightscout.interfaces.constraints.Constraints
+import info.nightscout.interfaces.db.PersistenceLayer
+import info.nightscout.interfaces.plugin.ActivePlugin
+import info.nightscout.interfaces.pump.PumpSync
+import info.nightscout.interfaces.pump.defs.PumpDescription
+import info.nightscout.interfaces.queue.Command
+import info.nightscout.interfaces.ui.UiInteraction
 import info.nightscout.shared.sharedPreferences.SP
 import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.Mockito
@@ -33,9 +32,9 @@ class QueueThreadTest : TestBaseWithProfile() {
     @Mock lateinit var sp: SP
     @Mock lateinit var powerManager: PowerManager
     @Mock lateinit var repository: AppRepository
-    @Mock lateinit var buildHelper: BuildHelper
     @Mock lateinit var androidPermission: AndroidPermission
-    @Mock lateinit var activityNames: ActivityNames
+    @Mock lateinit var uiInteraction: UiInteraction
+    @Mock lateinit var persistenceLayer: PersistenceLayer
 
     val injector = HasAndroidInjector {
         AndroidInjector {
@@ -54,13 +53,13 @@ class QueueThreadTest : TestBaseWithProfile() {
     private lateinit var commandQueue: CommandQueueImplementation
     private lateinit var sut: QueueThread
 
-    @Before
+    @BeforeEach
     fun prepare() {
         pumpPlugin = TestPumpPlugin(injector)
         commandQueue = CommandQueueImplementation(
             injector, aapsLogger, rxBus, aapsSchedulers, rh, constraintChecker,
             profileFunction, activePlugin, context, sp,
-            buildHelper, dateUtil, repository, fabricPrivacy, config, androidPermission, activityNames
+            config, dateUtil, repository, fabricPrivacy, androidPermission, uiInteraction, persistenceLayer
         )
 
         val pumpDescription = PumpDescription()
@@ -80,7 +79,7 @@ class QueueThreadTest : TestBaseWithProfile() {
         val percentageConstraint = Constraint(0)
         Mockito.`when`(constraintChecker.applyBasalPercentConstraints(anyObject(), anyObject()))
             .thenReturn(percentageConstraint)
-        Mockito.`when`(rh.gs(ArgumentMatchers.eq(R.string.temp_basal_absolute), anyObject(), anyObject())).thenReturn("TEMP BASAL %1\$.2f U/h %2\$d min")
+        Mockito.`when`(rh.gs(ArgumentMatchers.eq(info.nightscout.core.ui.R.string.temp_basal_absolute), anyObject(), anyObject())).thenReturn("TEMP BASAL %1\$.2f U/h %2\$d min")
 
         sut = QueueThread(commandQueue, context, aapsLogger, rxBus, activePlugin, rh, sp, androidPermission, config)
     }

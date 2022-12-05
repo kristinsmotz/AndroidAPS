@@ -5,7 +5,6 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import dagger.android.HasAndroidInjector;
-import info.nightscout.androidaps.interfaces.ActivePlugin;
 import info.nightscout.androidaps.plugins.pump.common.hw.rileylink.ble.RFSpy;
 import info.nightscout.androidaps.plugins.pump.common.hw.rileylink.ble.RileyLinkCommunicationException;
 import info.nightscout.androidaps.plugins.pump.common.hw.rileylink.ble.data.FrequencyScanResults;
@@ -20,6 +19,7 @@ import info.nightscout.androidaps.plugins.pump.common.hw.rileylink.defs.RileyLin
 import info.nightscout.androidaps.plugins.pump.common.hw.rileylink.service.RileyLinkServiceData;
 import info.nightscout.androidaps.plugins.pump.common.hw.rileylink.service.tasks.ServiceTaskExecutor;
 import info.nightscout.androidaps.plugins.pump.common.hw.rileylink.service.tasks.WakeAndTuneTask;
+import info.nightscout.interfaces.plugin.ActivePlugin;
 import info.nightscout.interfaces.utils.Round;
 import info.nightscout.pump.core.defs.PumpDeviceState;
 import info.nightscout.pump.core.utils.ByteUtil;
@@ -157,7 +157,7 @@ public abstract class RileyLinkCommunicationManager<T extends RLMessage> {
 
             // FIXME wakeUp successful !!!!!!!!!!!!!!!!!!
 
-            nextWakeUpRequired = System.currentTimeMillis() + (receiverDeviceAwakeForMinutes * 60 * 1000);
+            nextWakeUpRequired = System.currentTimeMillis() + ((long) receiverDeviceAwakeForMinutes * 60 * 1000);
         } else {
             aapsLogger.debug(LTag.PUMPBTCOMM, "Last pump communication was recent, not waking pump.");
         }

@@ -4,23 +4,23 @@ import android.content.Context
 import dagger.android.AndroidInjector
 import dagger.android.HasAndroidInjector
 import info.nightscout.androidaps.TestBase
-import info.nightscout.androidaps.interfaces.ActivePlugin
-import info.nightscout.interfaces.Config
-import info.nightscout.androidaps.interfaces.Constraints
-import info.nightscout.androidaps.interfaces.GlucoseUnit
-import info.nightscout.androidaps.interfaces.Loop
-import info.nightscout.androidaps.interfaces.ProfileFunction
-import info.nightscout.shared.interfaces.ResourceHelper
-import info.nightscout.shared.utils.DateUtil
-import info.nightscout.androidaps.utils.FabricPrivacy
 import info.nightscout.automation.AutomationPlugin
 import info.nightscout.automation.services.LocationServiceHelper
 import info.nightscout.automation.triggers.Trigger
+import info.nightscout.core.utils.fabric.FabricPrivacy
+import info.nightscout.interfaces.Config
+import info.nightscout.interfaces.GlucoseUnit
+import info.nightscout.interfaces.aps.Loop
+import info.nightscout.interfaces.constraints.Constraints
+import info.nightscout.interfaces.plugin.ActivePlugin
+import info.nightscout.interfaces.profile.ProfileFunction
 import info.nightscout.rx.bus.RxBus
+import info.nightscout.shared.interfaces.ResourceHelper
 import info.nightscout.shared.sharedPreferences.SP
+import info.nightscout.shared.utils.DateUtil
 import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.mockito.Mock
 import org.mockito.Mockito.anyInt
 import org.mockito.Mockito.`when`
@@ -52,7 +52,7 @@ class BolusTimerImplTest : TestBase() {
     private lateinit var automationPlugin: AutomationPlugin
     private lateinit var sut: BolusTimerImpl
 
-    @Before
+    @BeforeEach
     fun init() {
         `when`(rh.gs(anyInt())).thenReturn("")
         `when`(profileFunction.getUnits()).thenReturn(GlucoseUnit.MGDL)

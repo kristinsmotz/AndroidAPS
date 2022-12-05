@@ -7,64 +7,61 @@ import dagger.multibindings.IntoMap
 import info.nightscout.androidaps.danaRKorean.DanaRKoreanPlugin
 import info.nightscout.androidaps.danaRv2.DanaRv2Plugin
 import info.nightscout.androidaps.danar.DanaRPlugin
-import info.nightscout.androidaps.danars.DanaRSPlugin
-import info.nightscout.androidaps.diaconn.DiaconnG8Plugin
-import info.nightscout.androidaps.interfaces.PluginBase
-import info.nightscout.androidaps.plugin.general.openhumans.OpenHumansUploader
-import info.nightscout.androidaps.plugins.aps.loop.LoopPlugin
-import info.nightscout.androidaps.plugins.aps.openAPSAMA.OpenAPSAMAPlugin
-import info.nightscout.androidaps.plugins.aps.openAPSSMB.OpenAPSSMBPlugin
-import info.nightscout.androidaps.plugins.aps.openAPSSMBDynamicISF.OpenAPSSMBDynamicISFPlugin
-import info.nightscout.androidaps.plugins.configBuilder.ConfigBuilderPlugin
-import info.nightscout.androidaps.plugins.constraints.objectives.ObjectivesPlugin
-import info.nightscout.androidaps.plugins.constraints.safety.SafetyPlugin
-import info.nightscout.androidaps.plugins.general.actions.ActionsPlugin
-import info.nightscout.androidaps.plugins.general.dataBroadcaster.DataBroadcastPlugin
-import info.nightscout.androidaps.plugins.general.maintenance.MaintenancePlugin
-import info.nightscout.androidaps.plugins.general.overview.OverviewPlugin
-import info.nightscout.androidaps.plugins.general.persistentNotification.PersistentNotificationPlugin
-import info.nightscout.androidaps.plugins.general.wear.WearPlugin
-import info.nightscout.androidaps.plugins.iob.iobCobCalculator.IobCobCalculatorPlugin
-import info.nightscout.androidaps.plugins.pump.combo.ComboPlugin
+import info.nightscout.androidaps.plugin.general.openhumans.OpenHumansUploaderPlugin
+import info.nightscout.plugins.general.persistentNotification.PersistentNotificationPlugin
 import info.nightscout.androidaps.plugins.pump.eopatch.EopatchPumpPlugin
 import info.nightscout.androidaps.plugins.pump.insight.LocalInsightPlugin
 import info.nightscout.androidaps.plugins.pump.medtronic.MedtronicPumpPlugin
 import info.nightscout.androidaps.plugins.pump.omnipod.dash.OmnipodDashPumpPlugin
 import info.nightscout.androidaps.plugins.pump.omnipod.eros.OmnipodErosPumpPlugin
-import info.nightscout.androidaps.plugins.pump.virtual.VirtualPumpPlugin
-import info.nightscout.androidaps.plugins.sensitivity.SensitivityAAPSPlugin
-import info.nightscout.androidaps.plugins.sensitivity.SensitivityOref1Plugin
-import info.nightscout.androidaps.plugins.sensitivity.SensitivityWeightedAveragePlugin
-import info.nightscout.androidaps.plugins.source.AidexPlugin
-import info.nightscout.androidaps.plugins.source.DexcomPlugin
-import info.nightscout.androidaps.plugins.source.GlimpPlugin
-import info.nightscout.androidaps.plugins.source.GlunovoPlugin
-import info.nightscout.androidaps.plugins.source.IntelligoPlugin
-import info.nightscout.androidaps.plugins.source.MM640gPlugin
-import info.nightscout.androidaps.plugins.source.NSClientSourcePlugin
-import info.nightscout.androidaps.plugins.source.PoctechPlugin
-import info.nightscout.androidaps.plugins.source.RandomBgPlugin
-import info.nightscout.androidaps.plugins.source.TomatoPlugin
-import info.nightscout.androidaps.plugins.source.XdripPlugin
-import info.nightscout.androidaps.plugins.sync.nsclient.NSClientPlugin
-import info.nightscout.androidaps.plugins.sync.nsclientV3.NSClientV3Plugin
-import info.nightscout.androidaps.plugins.sync.tidepool.TidepoolPlugin
 import info.nightscout.automation.AutomationPlugin
+import info.nightscout.configuration.configBuilder.ConfigBuilderPlugin
+import info.nightscout.configuration.maintenance.MaintenancePlugin
+import info.nightscout.interfaces.plugin.PluginBase
+import info.nightscout.plugins.aps.loop.LoopPlugin
+import info.nightscout.plugins.aps.openAPSAMA.OpenAPSAMAPlugin
+import info.nightscout.plugins.aps.openAPSSMB.OpenAPSSMBPlugin
+import info.nightscout.plugins.aps.openAPSSMBDynamicISF.OpenAPSSMBDynamicISFPlugin
 import info.nightscout.plugins.constraints.bgQualityCheck.BgQualityCheckPlugin
-import info.nightscout.plugins.constraints.dstHelper.DstHelperPlugin
+import info.nightscout.plugins.constraints.objectives.ObjectivesPlugin
+import info.nightscout.plugins.constraints.safety.SafetyPlugin
 import info.nightscout.plugins.constraints.signatureVerifier.SignatureVerifierPlugin
-import info.nightscout.plugins.constraints.storage.StorageConstraintPlugin
-import info.nightscout.plugins.constraints.versionChecker.VersionCheckerPlugin
+import info.nightscout.plugins.general.actions.ActionsPlugin
 import info.nightscout.plugins.general.autotune.AutotunePlugin
+import info.nightscout.plugins.general.dataBroadcaster.DataBroadcastPlugin
 import info.nightscout.plugins.general.food.FoodPlugin
+import info.nightscout.plugins.general.overview.OverviewPlugin
 import info.nightscout.plugins.general.smsCommunicator.SmsCommunicatorPlugin
 import info.nightscout.plugins.general.themes.ThemeSwitcherPlugin
+import info.nightscout.plugins.general.wear.WearPlugin
 import info.nightscout.plugins.general.xdripStatusline.StatusLinePlugin
 import info.nightscout.plugins.insulin.InsulinLyumjevPlugin
 import info.nightscout.plugins.insulin.InsulinOrefFreePeakPlugin
 import info.nightscout.plugins.insulin.InsulinOrefRapidActingPlugin
 import info.nightscout.plugins.insulin.InsulinOrefUltraRapidActingPlugin
+import info.nightscout.plugins.iob.iobCobCalculator.IobCobCalculatorPlugin
 import info.nightscout.plugins.profile.ProfilePlugin
+import info.nightscout.plugins.pump.virtual.VirtualPumpPlugin
+import info.nightscout.plugins.source.AidexPlugin
+import info.nightscout.plugins.source.DexcomPlugin
+import info.nightscout.plugins.source.GlimpPlugin
+import info.nightscout.plugins.source.GlunovoPlugin
+import info.nightscout.plugins.source.IntelligoPlugin
+import info.nightscout.plugins.source.MM640gPlugin
+import info.nightscout.plugins.source.NSClientSourcePlugin
+import info.nightscout.plugins.source.PoctechPlugin
+import info.nightscout.plugins.source.RandomBgPlugin
+import info.nightscout.plugins.source.TomatoPlugin
+import info.nightscout.plugins.source.XdripPlugin
+import info.nightscout.plugins.sync.nsclient.NSClientPlugin
+import info.nightscout.plugins.sync.nsclientV3.NSClientV3Plugin
+import info.nightscout.plugins.sync.tidepool.TidepoolPlugin
+import info.nightscout.pump.combo.ComboPlugin
+import info.nightscout.pump.combov2.ComboV2Plugin
+import info.nightscout.pump.diaconn.DiaconnG8Plugin
+import info.nightscout.sensitivity.SensitivityAAPSPlugin
+import info.nightscout.sensitivity.SensitivityOref1Plugin
+import info.nightscout.sensitivity.SensitivityWeightedAveragePlugin
 import javax.inject.Qualifier
 
 @Suppress("unused")
@@ -159,7 +156,7 @@ abstract class PluginsListModule {
     @PumpDriver
     @IntoMap
     @IntKey(120)
-    abstract fun bindDanaRSPlugin(plugin: DanaRSPlugin): PluginBase
+    abstract fun bindDanaRSPlugin(plugin: info.nightscout.pump.danars.DanaRSPlugin): PluginBase
 
     @Binds
     @PumpDriver
@@ -172,6 +169,12 @@ abstract class PluginsListModule {
     @IntoMap
     @IntKey(140)
     abstract fun bindComboPlugin(plugin: ComboPlugin): PluginBase
+
+    @Binds
+    @PumpDriver
+    @IntoMap
+    @IntKey(141)
+    abstract fun bindComboV2Plugin(plugin: ComboV2Plugin): PluginBase
 
     @Binds
     @PumpDriver
@@ -261,7 +264,7 @@ abstract class PluginsListModule {
     @NotNSClient
     @IntoMap
     @IntKey(270)
-    abstract fun bindVersionCheckerPlugin(plugin: VersionCheckerPlugin): PluginBase
+    abstract fun bindVersionCheckerPlugin(plugin: info.nightscout.plugins.constraints.versionChecker.VersionCheckerPlugin): PluginBase
 
     @Binds
     @NotNSClient
@@ -273,7 +276,7 @@ abstract class PluginsListModule {
     @APS
     @IntoMap
     @IntKey(290)
-    abstract fun bindStorageConstraintPlugin(plugin: StorageConstraintPlugin): PluginBase
+    abstract fun bindStorageConstraintPlugin(plugin: info.nightscout.plugins.constraints.storage.StorageConstraintPlugin): PluginBase
 
     @Binds
     @APS
@@ -333,7 +336,7 @@ abstract class PluginsListModule {
     @AllConfigs
     @IntoMap
     @IntKey(380)
-    abstract fun bindDstHelperPlugin(plugin: DstHelperPlugin): PluginBase
+    abstract fun bindDstHelperPlugin(plugin: info.nightscout.plugins.constraints.dstHelper.DstHelperPlugin): PluginBase
 
     @Binds
     @AllConfigs
@@ -417,7 +420,7 @@ abstract class PluginsListModule {
     @NotNSClient
     @IntoMap
     @IntKey(480)
-    abstract fun bindsOpenHumansPlugin(plugin: OpenHumansUploader): PluginBase
+    abstract fun bindsOpenHumansPlugin(plugin: OpenHumansUploaderPlugin): PluginBase
 
     @Binds
     @AllConfigs

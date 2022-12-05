@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import com.google.gson.Gson
 import dagger.android.DaggerBroadcastReceiver
-import info.nightscout.androidaps.interfaces.ActivePlugin
-import info.nightscout.androidaps.interfaces.Pump
+import info.nightscout.interfaces.plugin.ActivePlugin
+import info.nightscout.interfaces.pump.Pump
 import info.nightscout.interfaces.utils.TimeChangeType
 import info.nightscout.rx.logging.AAPSLogger
 import info.nightscout.rx.logging.BundleLogger
