@@ -3,12 +3,10 @@ package info.nightscout.androidaps.plugins.pump.omnipod.common.ui.wizard.common.
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.android.HasAndroidInjector
-import info.nightscout.interfaces.data.PumpEnactResult
-import info.nightscout.androidaps.data.PumpEnactResultImpl
+import info.nightscout.interfaces.pump.PumpEnactResult
 import info.nightscout.rx.AapsSchedulers
 import info.nightscout.rx.logging.AAPSLogger
 import info.nightscout.rx.logging.LTag
-
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
@@ -42,7 +40,7 @@ abstract class ActionViewModelBase(
                     logger.error(LTag.PUMP, "Caught exception in while executing action in ActionViewModelBase", throwable)
                     _isActionExecutingLiveData.postValue(false)
                     _actionResultLiveData.postValue(
-                        PumpEnactResultImpl(injector).success(false).comment(
+                        PumpEnactResult(injector).success(false).comment(
                             throwable.message ?: "Caught exception in while executing action in ActionViewModelBase"
                         )
                     )

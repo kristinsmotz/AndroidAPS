@@ -14,31 +14,31 @@ import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.DaggerFragment
-import info.nightscout.androidaps.database.AppRepository
-import info.nightscout.androidaps.database.entities.TherapyEvent
-import info.nightscout.androidaps.database.entities.UserEntry.Action
-import info.nightscout.androidaps.database.entities.UserEntry.Sources
-import info.nightscout.androidaps.database.entities.ValueWithUnit
-import info.nightscout.androidaps.database.transactions.InvalidateAAPSStartedTherapyEventTransaction
-import info.nightscout.androidaps.database.transactions.InvalidateTherapyEventTransaction
-import info.nightscout.shared.extensions.toVisibility
-import info.nightscout.shared.interfaces.ResourceHelper
-import info.nightscout.androidaps.logging.UserEntryLogger
-import info.nightscout.androidaps.utils.ActionModeHelper
-import info.nightscout.shared.utils.DateUtil
-import info.nightscout.androidaps.utils.FabricPrivacy
-import info.nightscout.shared.utils.T
-import info.nightscout.androidaps.utils.ToastUtils
-import info.nightscout.androidaps.utils.Translator
-import info.nightscout.androidaps.utils.alertDialogs.OKDialog
-import info.nightscout.interfaces.BuildHelper
+import info.nightscout.core.ui.dialogs.OKDialog
+import info.nightscout.core.ui.toast.ToastUtils
+import info.nightscout.core.utils.ActionModeHelper
+import info.nightscout.core.utils.fabric.FabricPrivacy
+import info.nightscout.database.entities.TherapyEvent
+import info.nightscout.database.entities.UserEntry.Action
+import info.nightscout.database.entities.UserEntry.Sources
+import info.nightscout.database.entities.ValueWithUnit
+import info.nightscout.database.impl.AppRepository
+import info.nightscout.database.impl.transactions.InvalidateAAPSStartedTherapyEventTransaction
+import info.nightscout.database.impl.transactions.InvalidateTherapyEventTransaction
+import info.nightscout.interfaces.Config
+import info.nightscout.interfaces.Translator
+import info.nightscout.interfaces.logging.UserEntryLogger
 import info.nightscout.rx.AapsSchedulers
 import info.nightscout.rx.bus.RxBus
 import info.nightscout.rx.events.EventNSClientRestart
 import info.nightscout.rx.events.EventTherapyEventChange
 import info.nightscout.rx.logging.AAPSLogger
 import info.nightscout.rx.logging.LTag
+import info.nightscout.shared.extensions.toVisibility
+import info.nightscout.shared.interfaces.ResourceHelper
 import info.nightscout.shared.sharedPreferences.SP
+import info.nightscout.shared.utils.DateUtil
+import info.nightscout.shared.utils.T
 import info.nightscout.ui.R
 import info.nightscout.ui.activities.fragments.TreatmentsCareportalFragment.RecyclerViewAdapter.TherapyEventsViewHolder
 import info.nightscout.ui.databinding.TreatmentsCareportalFragmentBinding
@@ -59,7 +59,7 @@ class TreatmentsCareportalFragment : DaggerFragment(), MenuProvider {
     @Inject lateinit var fabricPrivacy: FabricPrivacy
     @Inject lateinit var translator: Translator
     @Inject lateinit var dateUtil: DateUtil
-    @Inject lateinit var buildHelper: BuildHelper
+    @Inject lateinit var config: Config
     @Inject lateinit var aapsSchedulers: AapsSchedulers
     @Inject lateinit var repository: AppRepository
     @Inject lateinit var uel: UserEntryLogger
@@ -91,7 +91,7 @@ class TreatmentsCareportalFragment : DaggerFragment(), MenuProvider {
 
     private fun refreshFromNightscout() {
         activity?.let { activity ->
-            OKDialog.showConfirmation(activity, rh.gs(R.string.careportal), rh.gs(R.string.refresheventsfromnightscout) + " ?", Runnable {
+            OKDialog.showConfirmation(activity, rh.gs(info.nightscout.core.ui.R.string.careportal), rh.gs(R.string.refresheventsfromnightscout) + " ?", Runnable {
                 uel.log(Action.CAREPORTAL_NS_REFRESH, Sources.Treatments)
                 disposable += Completable.fromAction { repository.deleteAllTherapyEventsEntries() }
                     .subscribeOn(aapsSchedulers.io)
@@ -106,9 +106,9 @@ class TreatmentsCareportalFragment : DaggerFragment(), MenuProvider {
 
     private fun removeStartedEvents() {
         activity?.let { activity ->
-            OKDialog.showConfirmation(activity, rh.gs(R.string.careportal), rh.gs(R.string.careportal_remove_started_events), Runnable {
+            OKDialog.showConfirmation(activity, rh.gs(info.nightscout.core.ui.R.string.careportal), rh.gs(R.string.careportal_remove_started_events), Runnable {
                 uel.log(Action.RESTART_EVENTS_REMOVED, Sources.Treatments)
-                disposable += repository.runTransactionForResult(InvalidateAAPSStartedTherapyEventTransaction(rh.gs(R.string.androidaps_start)))
+                disposable += repository.runTransactionForResult(InvalidateAAPSStartedTherapyEventTransaction(rh.gs(info.nightscout.core.ui.R.string.androidaps_start)))
                     .subscribe(
                         { result -> result.invalidated.forEach { aapsLogger.debug(LTag.DATABASE, "Invalidated therapy event $it") } },
                         { aapsLogger.error(LTag.DATABASE, "Error while invalidating therapy event", it) }
@@ -200,7 +200,7 @@ class TreatmentsCareportalFragment : DaggerFragment(), MenuProvider {
         this.menu = menu
         inflater.inflate(R.menu.menu_treatments_careportal, menu)
         updateMenuVisibility()
-        val nsUploadOnly = !sp.getBoolean(R.string.key_ns_receive_therapy_events, false) || !buildHelper.isEngineeringMode()
+        val nsUploadOnly = !sp.getBoolean(info.nightscout.core.utils.R.string.key_ns_receive_therapy_events, false) || !config.isEngineeringMode()
         menu.findItem(R.id.nav_refresh_ns)?.isVisible = !nsUploadOnly
     }
 
@@ -245,16 +245,16 @@ class TreatmentsCareportalFragment : DaggerFragment(), MenuProvider {
     private fun getConfirmationText(selectedItems: SparseArray<TherapyEvent>): String {
         if (selectedItems.size() == 1) {
             val therapyEvent = selectedItems.valueAt(0)
-            return rh.gs(R.string.eventtype) + ": " + translator.translate(therapyEvent.type) + "\n" +
-                rh.gs(R.string.notes_label) + ": " + (therapyEvent.note ?: "") + "\n" +
-                rh.gs(R.string.date) + ": " + dateUtil.dateAndTimeString(therapyEvent.timestamp)
+            return rh.gs(info.nightscout.core.ui.R.string.event_type) + ": " + translator.translate(therapyEvent.type) + "\n" +
+                rh.gs(info.nightscout.core.ui.R.string.notes_label) + ": " + (therapyEvent.note ?: "") + "\n" +
+                rh.gs(info.nightscout.core.ui.R.string.date) + ": " + dateUtil.dateAndTimeString(therapyEvent.timestamp)
         }
-        return rh.gs(R.string.confirm_remove_multiple_items, selectedItems.size())
+        return rh.gs(info.nightscout.core.ui.R.string.confirm_remove_multiple_items, selectedItems.size())
     }
 
     private fun removeSelected(selectedItems: SparseArray<TherapyEvent>) {
         activity?.let { activity ->
-            OKDialog.showConfirmation(activity, rh.gs(R.string.removerecord), getConfirmationText(selectedItems), Runnable {
+            OKDialog.showConfirmation(activity, rh.gs(info.nightscout.core.ui.R.string.removerecord), getConfirmationText(selectedItems), Runnable {
                 selectedItems.forEach { _, therapyEvent ->
                     uel.log(
                         Action.CAREPORTAL_REMOVED, Sources.Treatments, therapyEvent.note,

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="key_insulin_button_increment_1" translatable="false">insulin_button_increment_1</string>
+    <string name="key_insulin_button_increment_2" translatable="false">insulin_button_increment_2</string>
+    <string name="key_insulin_button_increment_3" translatable="false">insulin_button_increment_3</string>
+
     <!--    DateUtil-->
     <string name="minago">%1$d m ago</string>
     <string name="minago_long">%1$d minutes ago</string>
@@ -27,4 +31,12 @@
     <string name="tomorrow">Tomorrow</string>
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
+
+    <!-- Rx -->
+    <string name="connecting_for">Connecting for %1$d s</string>
+    <string name="handshaking">Handshaking</string>
+    <string name="connected">Connected</string>
+    <string name="disconnecting">Disconnecting</string>
+    <string name="waiting_for_disconnection">Waiting for disconnection</string>
+
 </resources>
