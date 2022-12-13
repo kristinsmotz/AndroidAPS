@@ -216,10 +216,6 @@ class MedtronicPumpPlugin @Inject constructor(
         }
     }
 
-    override fun hasService(): Boolean {
-        return true
-    }
-
     override fun onStartScheduledPumpActions() {
 
         // check status every minute (if any status needs refresh we send readStatus command)
@@ -664,10 +660,7 @@ class MedtronicPumpPlugin @Inject constructor(
                 val time = now + bolusTime * 1000
                 busyTimestamps.add(time)
                 setEnableCustomAction(MedtronicCustomActionType.ClearBolusBlock, true)
-                PumpEnactResult(injector).success(true) //
-                    .enacted(true) //
-                    .bolusDelivered(detailedBolusInfo.insulin) //
-                    .carbsDelivered(detailedBolusInfo.carbs)
+                PumpEnactResult(injector).success(true).enacted(true).bolusDelivered(detailedBolusInfo.insulin)
             }
         } finally {
             finishAction("Bolus")
