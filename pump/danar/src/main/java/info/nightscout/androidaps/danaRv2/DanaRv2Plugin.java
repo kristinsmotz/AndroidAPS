@@ -57,8 +57,6 @@ public class DanaRv2Plugin extends AbstractDanaRPlugin {
     private final TemporaryBasalStorage temporaryBasalStorage;
     private final FabricPrivacy fabricPrivacy;
 
-    public long lastEventTimeLoaded = 0;
-
     @Inject
     public DanaRv2Plugin(
             HasAndroidInjector injector,
@@ -197,8 +195,7 @@ public class DanaRv2Plugin extends AbstractDanaRPlugin {
                 connectionOK = sExecutionService.bolus(detailedBolusInfo.insulin, (int) carbs, carbTimeStamp, t);
             PumpEnactResult result = new PumpEnactResult(getInjector());
             result.success(connectionOK && Math.abs(detailedBolusInfo.insulin - t.getInsulin()) < pumpDescription.getBolusStep())
-                    .bolusDelivered(t.getInsulin())
-                    .carbsDelivered(detailedBolusInfo.carbs);
+                    .bolusDelivered(t.getInsulin());
             if (!result.getSuccess())
                 result.comment(rh.gs(info.nightscout.pump.dana.R.string.boluserrorcode, detailedBolusInfo.insulin, t.getInsulin(),
                         danaPump.getBolusStartErrorCode()));
@@ -209,7 +206,7 @@ public class DanaRv2Plugin extends AbstractDanaRPlugin {
             return result;
         } else {
             PumpEnactResult result = new PumpEnactResult(getInjector());
-            result.success(false).bolusDelivered(0d).carbsDelivered(0d).comment(info.nightscout.core.ui.R.string.invalid_input);
+            result.success(false).bolusDelivered(0d).comment(info.nightscout.core.ui.R.string.invalid_input);
             aapsLogger.error("deliverTreatment: Invalid input");
             return result;
         }
@@ -346,7 +343,7 @@ public class DanaRv2Plugin extends AbstractDanaRPlugin {
         PumpEnactResult result = new PumpEnactResult(getInjector());
         if (danaPump.isTempBasalInProgress()) {
             sExecutionService.tempBasalStop();
-            result.enacted(true).isTempCancel(true);
+            result.success(true).enacted(true).isTempCancel(true);
         } else {
             result.success(true).isTempCancel(true).comment(info.nightscout.core.ui.R.string.ok);
             aapsLogger.debug(LTag.PUMP, "cancelRealTempBasal: OK");

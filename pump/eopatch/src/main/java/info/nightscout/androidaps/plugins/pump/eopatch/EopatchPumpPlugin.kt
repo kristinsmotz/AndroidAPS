@@ -27,6 +27,7 @@ import info.nightscout.interfaces.pump.defs.PumpType
 import info.nightscout.interfaces.queue.CommandQueue
 import info.nightscout.interfaces.queue.CustomCommand
 import info.nightscout.interfaces.ui.UiInteraction
+import info.nightscout.interfaces.utils.Round
 import info.nightscout.interfaces.utils.TimeChangeType
 import info.nightscout.rx.AapsSchedulers
 import info.nightscout.rx.bus.RxBus
@@ -44,6 +45,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 import org.json.JSONObject
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -266,12 +268,8 @@ class EopatchPumpPlugin @Inject constructor(
 
     override fun deliverTreatment(detailedBolusInfo: DetailedBolusInfo): PumpEnactResult {
 
-        if (detailedBolusInfo.insulin == 0.0 && detailedBolusInfo.carbs == 0.0) {
-            // neither carbs nor bolus requested
-            aapsLogger.error("deliverTreatment: Invalid input: neither carbs nor insulin are set in treatment")
-            return PumpEnactResult(injector).success(false).enacted(false).bolusDelivered(0.0).carbsDelivered(0.0)
-                .comment(rh.gs(info.nightscout.core.ui.R.string.invalid_input))
-        } else if (detailedBolusInfo.insulin > 0.0) {
+        val askedInsulin = detailedBolusInfo.insulin
+        if (detailedBolusInfo.insulin > 0.0) {
             var isSuccess = true
             val result = BehaviorSubject.createDefault(true)
             val disposable = result.hide()
@@ -315,17 +313,14 @@ class EopatchPumpPlugin @Inject constructor(
 
             disposable.dispose()
 
-            return if (isSuccess)
-                PumpEnactResult(injector).success(true)/*.enacted(true)*/.carbsDelivered(detailedBolusInfo.carbs).bolusDelivered(detailedBolusInfo.insulin)
+            return if (isSuccess && abs(askedInsulin - detailedBolusInfo.insulin) < pumpDescription.bolusStep)
+                PumpEnactResult(injector).success(true).enacted(true).bolusDelivered(askedInsulin)
             else
-                PumpEnactResult(injector).success(false)/*.enacted(false)*/.carbsDelivered(0.0).bolusDelivered(detailedBolusInfo.insulin)
+                PumpEnactResult(injector).success(false)/*.enacted(false)*/.bolusDelivered(Round.roundTo(detailedBolusInfo.insulin, 0.01))
 
         } else {
-            // no bolus required, carb only treatment
-            patchManager.addBolusToHistory(detailedBolusInfo)
-
-            return PumpEnactResult(injector).success(true).enacted(true).bolusDelivered(0.0)
-                .carbsDelivered(detailedBolusInfo.carbs).comment(rh.gs(info.nightscout.core.ui.R.string.ok))
+            // no bolus required
+            return PumpEnactResult(injector).success(false).enacted(false).bolusDelivered(0.0).comment(rh.gs(info.nightscout.core.ui.R.string.error))
         }
     }
 
