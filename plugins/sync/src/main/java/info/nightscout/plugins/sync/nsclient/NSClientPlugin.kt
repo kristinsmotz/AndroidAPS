@@ -14,6 +14,7 @@ import androidx.preference.SwitchPreference
 import dagger.android.HasAndroidInjector
 import info.nightscout.core.extensions.toJson
 import info.nightscout.core.utils.fabric.FabricPrivacy
+import info.nightscout.core.validators.ValidatingEditTextPreference
 import info.nightscout.interfaces.Config
 import info.nightscout.interfaces.Constants
 import info.nightscout.interfaces.nsclient.NSAlarm
@@ -153,6 +154,7 @@ class NSClientPlugin @Inject constructor(
         if (activePlugin.activeBgSource is DoingOwnUploadSource) {
             preferenceFragment.findPreference<SwitchPreference>(rh.gs(info.nightscout.core.utils.R.string.key_do_ns_upload))?.isVisible = false
         }
+        preferenceFragment.findPreference<ValidatingEditTextPreference>(rh.gs(R.string.key_ns_client_token))?.isVisible = false
     }
 
     override val hasWritePermission: Boolean get() = nsClientService?.hasWriteAuth ?: false
@@ -242,7 +244,7 @@ class NSClientPlugin @Inject constructor(
         dataSyncSelector.resetToNextFullSync()
     }
 
-    override fun dbAdd(collection: String, dataPair: DataSyncSelector.DataPair, progress: String) {
+    override fun nsAdd(collection: String, dataPair: DataSyncSelector.DataPair, progress: String) {
         when (dataPair) {
             is DataSyncSelector.PairBolus                  -> dataPair.value.toJson(true, dateUtil)
             is DataSyncSelector.PairCarbs                  -> dataPair.value.toJson(true, dateUtil)
@@ -264,7 +266,7 @@ class NSClientPlugin @Inject constructor(
         }
     }
 
-    override fun dbUpdate(collection: String, dataPair: DataSyncSelector.DataPair, progress: String) {
+    override fun nsUpdate(collection: String, dataPair: DataSyncSelector.DataPair, progress: String) {
         val id = when (dataPair) {
             is DataSyncSelector.PairBolus                  -> dataPair.value.interfaceIDs.nightscoutId
             is DataSyncSelector.PairCarbs                  -> dataPair.value.interfaceIDs.nightscoutId
