@@ -30,9 +30,9 @@ import com.google.common.util.concurrent.ListenableFuture
 import dagger.android.AndroidInjection
 import info.nightscout.androidaps.R
 import info.nightscout.androidaps.comm.DataLayerListenerServiceWear
-import info.nightscout.shared.logging.AAPSLogger
+import info.nightscout.rx.logging.AAPSLogger
 import info.nightscout.shared.sharedPreferences.SP
-import info.nightscout.shared.weardata.EventData
+import info.nightscout.rx.weardata.EventData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,7 +42,7 @@ import kotlin.math.sqrt
 
 private const val SPACING_ACTIONS = 3f
 private const val ICON_SIZE_FRACTION = 0.4f // Percentage of button diameter
-private const val BUTTON_COLOR = R.color.gray_850
+private val BUTTON_COLOR = R.color.gray_850
 private const val LARGE_SCREEN_WIDTH_DP = 210
 
 interface TileSource {

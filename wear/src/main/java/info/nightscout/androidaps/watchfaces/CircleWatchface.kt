@@ -21,17 +21,18 @@ import com.ustwo.clockwise.wearable.WatchFace
 import dagger.android.AndroidInjection
 import info.nightscout.androidaps.R
 import info.nightscout.androidaps.data.RawDisplayData
-import info.nightscout.androidaps.events.EventWearToMobile
+import info.nightscout.rx.events.EventWearToMobile
 import info.nightscout.androidaps.interaction.menus.MainMenuActivity
 import info.nightscout.androidaps.interaction.utils.Persistence
-import info.nightscout.androidaps.plugins.bus.RxBus
-import info.nightscout.androidaps.utils.rx.AapsSchedulers
-import info.nightscout.shared.logging.AAPSLogger
-import info.nightscout.shared.logging.LTag
+import info.nightscout.rx.bus.RxBus
+import info.nightscout.rx.AapsSchedulers
+import info.nightscout.rx.logging.AAPSLogger
+import info.nightscout.rx.logging.LTag
+
 import info.nightscout.shared.sharedPreferences.SP
-import info.nightscout.shared.weardata.EventData
-import info.nightscout.shared.weardata.EventData.ActionResendData
-import info.nightscout.shared.weardata.EventData.SingleBg
+import info.nightscout.rx.weardata.EventData
+import info.nightscout.rx.weardata.EventData.ActionResendData
+import info.nightscout.rx.weardata.EventData.SingleBg
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import java.util.*
@@ -153,10 +154,19 @@ class CircleWatchface : WatchFace() {
             //Also possible: View.INVISIBLE instead of View.GONE (no layout change)
             mSgv?.visibility = View.INVISIBLE
         }
+        val detailedIob = sp.getBoolean(R.string.key_show_detailed_iob, false)
+        val showBgi = sp.getBoolean(R.string.key_show_bgi, false)
+        val iobString =
+            if (detailedIob) "${status.iobSum} ${status.iobDetail}"
+            else status.iobSum + getString(R.string.units_short)
+        val externalStatus = if (showBgi)
+            "${status.externalStatus} ${iobString} ${status.bgi}"
+        else
+            "${status.externalStatus} ${iobString}"
         var textView = myLayout?.findViewById<TextView>(R.id.statusString)
         if (sp.getBoolean(R.string.key_show_external_status, true)) {
             textView?.visibility = View.VISIBLE
-            textView?.text = status.externalStatus
+            textView?.text = externalStatus
             textView?.setTextColor(textColor)
         } else {
             //Also possible: View.INVISIBLE instead of View.GONE (no layout change)
@@ -177,9 +187,10 @@ class CircleWatchface : WatchFace() {
             textView?.visibility = View.INVISIBLE
         }
         textView = myLayout?.findViewById(R.id.deltaString)
+        val detailedDelta = sp.getBoolean(R.string.key_show_detailed_delta, false)
         if (sp.getBoolean(R.string.key_show_delta, true)) {
             textView?.visibility = View.VISIBLE
-            textView?.text = singleBg.delta
+            textView?.text = if (detailedDelta) singleBg.deltaDetailed else singleBg.delta
             textView?.setTextColor(textColor)
             if (sp.getBoolean(R.string.key_show_big_numbers, false)) {
                 textView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25f)
@@ -187,7 +198,7 @@ class CircleWatchface : WatchFace() {
                 textView?.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18f)
             }
             if (sp.getBoolean(R.string.key_show_avg_delta, true)) {
-                textView?.append("  " + singleBg.avgDelta)
+                textView?.append("  " + if (detailedDelta) singleBg.avgDeltaDetailed else singleBg.avgDelta)
             }
         } else {
             //Also possible: View.INVISIBLE instead of View.GONE (no layout change)

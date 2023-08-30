@@ -8,20 +8,21 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.android.gms.tasks.Tasks
 import com.google.android.gms.wearable.*
 import dagger.android.AndroidInjection
-import info.nightscout.androidaps.R
-import info.nightscout.androidaps.events.EventWearToMobile
 import info.nightscout.androidaps.interaction.utils.Persistence
 import info.nightscout.androidaps.interaction.utils.WearUtil
-import info.nightscout.androidaps.plugins.bus.RxBus
-import info.nightscout.androidaps.utils.rx.AapsSchedulers
-import info.nightscout.shared.logging.AAPSLogger
-import info.nightscout.shared.logging.LTag
+import info.nightscout.rx.AapsSchedulers
+import info.nightscout.rx.bus.RxBus
+import info.nightscout.rx.events.EventWearDataToMobile
+import info.nightscout.rx.events.EventWearToMobile
+import info.nightscout.rx.logging.AAPSLogger
+import info.nightscout.rx.logging.LTag
+import info.nightscout.rx.weardata.EventData
 import info.nightscout.shared.sharedPreferences.SP
-import info.nightscout.shared.weardata.EventData
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
+import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
 class DataLayerListenerServiceWear : WearableListenerService() {
@@ -43,8 +44,9 @@ class DataLayerListenerServiceWear : WearableListenerService() {
 
     private val disposable = CompositeDisposable()
 
-    private val rxPath get() = getString(R.string.path_rx_bridge)
-
+    private val rxPath get() = getString(info.nightscout.shared.R.string.path_rx_bridge)
+    private val rxDataPath get() = getString(info.nightscout.shared.R.string.path_rx_data_bridge)
+    @ExperimentalSerializationApi
     override fun onCreate() {
         AndroidInjection.inject(this)
         super.onCreate()
@@ -55,10 +57,12 @@ class DataLayerListenerServiceWear : WearableListenerService() {
             .subscribe {
                 sendMessage(rxPath, it.payload.serialize())
             }
-    }
-
-    override fun onPeerConnected(p0: Node) {
-        super.onPeerConnected(p0)
+        disposable += rxBus
+            .toObservable(EventWearDataToMobile::class.java)
+            .observeOn(aapsSchedulers.io)
+            .subscribe {
+                sendMessage(rxDataPath, it.payload.serializeByte())
+            }
     }
 
     override fun onCapabilityChanged(p0: CapabilityInfo) {
@@ -92,7 +96,7 @@ class DataLayerListenerServiceWear : WearableListenerService() {
         }
         super.onDataChanged(dataEvents)
     }
-
+    @ExperimentalSerializationApi
     override fun onMessageReceived(messageEvent: MessageEvent) {
         super.onMessageReceived(messageEvent)
 
@@ -100,6 +104,14 @@ class DataLayerListenerServiceWear : WearableListenerService() {
             rxPath -> {
                 aapsLogger.debug(LTag.WEAR, "onMessageReceived: ${String(messageEvent.data)}")
                 val command = EventData.deserialize(String(messageEvent.data))
+                rxBus.send(command.also { it.sourceNodeId = messageEvent.sourceNodeId })
+                // Use this sender
+                transcriptionNodeId = messageEvent.sourceNodeId
+                aapsLogger.debug(LTag.WEAR, "Updated node: $transcriptionNodeId")
+            }
+            rxDataPath -> {
+                aapsLogger.debug(LTag.WEAR, "onMessageReceived: ${messageEvent.data}")
+                val command = EventData.deserializeByte(messageEvent.data)
                 rxBus.send(command.also { it.sourceNodeId = messageEvent.sourceNodeId })
                 // Use this sender
                 transcriptionNodeId = messageEvent.sourceNodeId
