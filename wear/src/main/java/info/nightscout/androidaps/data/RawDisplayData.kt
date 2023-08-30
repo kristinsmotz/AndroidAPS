@@ -1,7 +1,7 @@
 package info.nightscout.androidaps.data
 
 import info.nightscout.androidaps.interaction.utils.Persistence
-import info.nightscout.shared.weardata.EventData
+import info.nightscout.rx.weardata.EventData
 
 /**
  * Holds bunch of data model variables and lists that arrive from phone app and are due to be
@@ -20,7 +20,9 @@ class RawDisplayData {
         glucoseUnits = "-",
         slopeArrow = "--",
         delta = "--",
+        deltaDetailed = "--",
         avgDelta = "--",
+        avgDeltaDetailed = "--",
         sgvLevel = 0,
         sgv = 0.0,
         high = 0.0,
@@ -32,14 +34,12 @@ class RawDisplayData {
         externalStatus = "no status",
         iobSum = "IOB",
         iobDetail = "-.--",
-        detailedIob = false,
         cob = "--g",
         currentBasal = "-.--U/h",
         battery = "--",
         rigBattery = "--",
         openApsStatus = -1,
         bgi = "--",
-        showBgi = false,
         batteryLevel = 1
     )
 

@@ -11,6 +11,7 @@
     <string name="label_watchface_cockpit">AAPS (Cockpit)</string>
     <string name="label_watchface_steampunk">AAPS (Steampunk)</string>
     <string name="label_watchface_digital_style">AAPS (Digital)</string>
+    <string name="label_watchface_custom">AAPS(perso)</string>
     <string name="label_actions_tile">AAPS (Actions)</string>
     <string name="label_temp_target_tile">AAPS(Cible Temp)</string>
     <string name="label_quick_wizard_tile">AAPS(Assistant rapide)</string>
@@ -22,16 +23,20 @@
     <string name="msg_warning_old">Données AAPS anciennes de %1$s ! Vérifiez votre capteur, les configurations xDrip+, NS, AAPS ou autre !</string>
     <string name="pref_vibrate_on_bolus">Vibrer sur Bolus</string>
     <string name="pref_units_for_actions">Unités pour les Actions</string>
+    <string name="units_short">U</string>
     <string name="pref_show_date">Afficher Date</string>
     <string name="pref_show_iob">Afficher IA</string>
+    <string name="pref_show_detailed_iob">Afficher IA détaillée</string>
     <string name="pref_show_cob">Afficher GA</string>
     <string name="pref_show_delta">Afficher Delta</string>
+    <string name="pref_show_detailed_delta">Afficher delta détaillé</string>
     <string name="pref_show_avgdelta">Afficher Delta Moyen</string>
     <string name="pref_show_phone_battery">Afficher Batterie Téléphone</string>
     <string name="pref_show_rig_battery">Afficher Batterie Système</string>
     <string name="pref_show_basal_rate">Afficher Basale</string>
     <string name="pref_show_loop_status">Afficher État Boucle</string>
     <string name="pref_show_bg">Afficher Glycémie</string>
+    <string name="pref_show_bgi">Afficher IGly</string>
     <string name="pref_show_direction_arrow">Afficher Flèche</string>
     <string name="pref_show_ago">Afficher Min Passées</string>
     <string name="pref_dark" comment="Enables dark visual theme">Sombre</string>
@@ -103,7 +108,7 @@
     <string name="action_preset_1">Quantité 1</string>
     <string name="action_preset_2">Quantité 2</string>
     <string name="action_preset_3">Quantité 3</string>
-    <string name="action_free_amount" comment="In prime/fill menu, allows to enter any amount to be used for priming/filling">Quantité libre</string>
+    <string name="action_free_amount" comment="In prime/fill menu, allows one to enter any amount to be used for priming/filling">Quantité libre</string>
     <string name="action_confirm">CONFIRMER</string>
     <string name="action_timeshift">décalage</string>
     <string name="action_bolus">Bolus</string>
@@ -113,7 +118,7 @@
     <string name="status_pump">Pompe</string>
     <string name="status_loop">Boucle</string>
     <string name="status_profile_switch">Changement de profil</string>
-    <string name="status_tdd">DTI</string>
+    <string name="status_tdd">DTQ</string>
     <string name="activity_carb">GA</string>
     <string name="activity_IOB">IA</string>
     <string name="activity_no_status">aucun statut</string>
@@ -143,6 +148,7 @@
     <string name="pref_simplify_ui_sum">Afficher seulement l\'heure et la glycémie</string>
     <string name="pref_vibrate_hourly">Vibrer à l\'heure</string>
     <string name="pref_show_weeknumber">Afficher numéro semaine</string>
+    <string name="custom_pref_show_seconds">Afficher les secondes</string>
     <string name="digitalstyle_pref_your_style">Style :</string>
     <string name="digitalstyle_style_none">aucun</string>
     <string name="digitalstyle_style_minimal">minimal</string>
@@ -176,9 +182,9 @@
     <string name="no_iob_u">--U</string>
     <string name="no_cob_g">--g</string>
     <string name="no_tmp_basal_u_h">-.-- U/h</string>
-    <string name="uploader_na">Téléchargement : ---%</string>
-    <string name="no_status">aucun statut</string>
-    <string name="time_stamp_na_min_ago">Il y a -- minutes</string>
+    <string name="uploader_na">T: --%</string>
+    <string name="no_status">É: --</string>
+    <string name="time_stamp_na_min_ago">Il y a -- min.</string>
     <string name="delta_na">--- mg/dl</string>
     <string name="no_loop_status">Aucun statut de la boucle</string>
     <string name="cob_000g">000 g</string>
@@ -186,4 +192,14 @@
     <string name="iob_0_00u">0,00 U</string>
     <string name="snooze_alert">AAPS Mise en veille Alerte</string>
     <string name="sending_snooze">Envoi Mise en veille à AAPS</string>
+    <string name="short_hour">h</string>
+    <string name="week_short">s</string>
+    <string name="day_short">j</string>
+    <string name="hour_short">h</string>
+    <string name="hour_minute">%1$s:%2$s</string>
+    <string name="hour_minute_second">%1$s:%2$s:%3$s</string>
+    <string name="old">ancien</string>
+    <string name="old_warning">!ancien!</string>
+    <string name="error">!err!</string>
+    <string name="pref_heartRateSampling">Fréquence Cardiaque</string>
 </resources>
