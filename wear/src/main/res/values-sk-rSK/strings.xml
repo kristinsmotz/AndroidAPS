@@ -24,6 +24,11 @@
     <string name="pref_vibrate_on_bolus">Zavibrovať pri boluse</string>
     <string name="pref_units_for_actions">Jednotky (mmol/l alebo mg/dl)</string>
     <string name="units_short">J</string>
+    <string name="pref_display_settings">Displej</string>
+    <string name="pref_graph_settings">Graf</string>
+    <string name="pref_interface_settings">Rozhranie</string>
+    <string name="pref_others_settings">Ostatné</string>
+    <string name="pref_complication_settings">Komplikácia</string>
     <string name="pref_show_date">Zobraziť dátum</string>
     <string name="pref_show_iob">Zobraziť IOB</string>
     <string name="pref_show_detailed_iob">Zobraziť detailný IOB</string>
@@ -41,6 +46,7 @@
     <string name="pref_show_ago">Zobraziť aktualizované pred</string>
     <string name="pref_dark" comment="Enables dark visual theme">Tmavý </string>
     <string name="pref_highlight_basals">Zvýrazniť bazály</string>
+    <string name="pref_prediction_lines">Zobraziť predikcie</string>
     <string name="pref_matching_divider" comment="To make divider match its background with background of whole watchface">Zodpovedajúci oddeľovač</string>
     <string name="pref_chart_timeframe">Časové okno grafu</string>
     <string name="pref_1_hour">1 hodina</string>
