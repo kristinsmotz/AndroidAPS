@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="2dp"
-    tools:context="info.nightscout.plugins.general.wear.WearFragment">
+    tools:context=".general.wear.WearFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/log"
@@ -110,7 +110,7 @@
                     android:padding="10dip"
                     app:columnCount="2">
 
-                    <info.nightscout.core.ui.elements.SingleClickButton
+                    <app.aaps.core.ui.elements.SingleClickButton
                         android:id="@+id/load_custom"
                         style="@style/GrayButton"
                         android:layout_width="0dp"
@@ -119,28 +119,30 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"
                         android:text="@string/wear_load_watchface"
-                        android:textSize="11sp"
+                        android:textSize="12sp"
+                        android:textColor="?attr/treatmentButton"
                         app:layout_columnWeight="1"
                         app:layout_gravity="fill"
                         app:layout_row="0"
                         app:layout_column="0" />
-    <!--
-                    <info.nightscout.core.ui.elements.SingleClickButton
-                        android:id="@+id/send_custom"
+
+                    <app.aaps.core.ui.elements.SingleClickButton
+                        android:id="@+id/infos_custom"
                         style="@style/GrayButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:drawableTop="@drawable/send_custom"
+                        android:drawableTop="@drawable/ic_cwf_infos"
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"
-                        android:text="@string/wear_send_watchface"
-                        android:textSize="11sp"
-                        app:layout_column="1"
+                        android:text="@string/wear_infos_watchface"
+                        android:textSize="12sp"
+                        android:textColor="?attr/treatmentButton"
                         app:layout_columnWeight="1"
                         app:layout_gravity="fill"
+                        app:layout_column="1"
                         app:layout_row="0" />
-    -->
-                    <info.nightscout.core.ui.elements.SingleClickButton
+
+                    <app.aaps.core.ui.elements.SingleClickButton
                         android:id="@+id/export_custom"
                         style="@style/GrayButton"
                         android:layout_width="0dp"
@@ -149,14 +151,15 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"
                         android:text="@string/wear_export_watchface"
-                        android:textSize="11sp"
+                        android:textSize="12sp"
+                        android:textColor="?attr/treatmentButton"
                         android:visibility="visible"
                         app:layout_columnWeight="1"
                         app:layout_gravity="fill"
-                        app:layout_row="0"
-                        app:layout_column="1" />
+                        app:layout_row="1"
+                        app:layout_column="0" />
 
-                    <info.nightscout.core.ui.elements.SingleClickButton
+                    <app.aaps.core.ui.elements.SingleClickButton
                         android:id="@+id/default_custom"
                         style="@style/GrayButton"
                         android:layout_width="0dp"
@@ -165,12 +168,13 @@
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"
                         android:text="@string/wear_default_watchface"
-                        android:textSize="11sp"
+                        android:textSize="12sp"
+                        android:textColor="?attr/treatmentButton"
                         android:visibility="visible"
                         app:layout_columnWeight="1"
                         app:layout_gravity="fill"
                         app:layout_row="1"
-                        app:layout_column="0" />
+                        app:layout_column="1" />
 
                 </androidx.gridlayout.widget.GridLayout>
 
@@ -188,7 +192,6 @@
                 android:tag="cover_chart"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/watchface_custom"
                 android:visibility="visible"
                 android:orientation="vertical" />
 
