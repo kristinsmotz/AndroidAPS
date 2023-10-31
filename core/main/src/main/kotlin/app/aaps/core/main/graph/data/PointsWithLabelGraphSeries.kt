@@ -265,14 +265,15 @@ class PointsWithLabelGraphSeries<E : DataPointWithLabelInterface> : BaseSeries<E
                     mPaint.strokeWidth = 0f
                     if (!value.label.isEmpty()) {
                         mPaint.strokeWidth = 0f
-                        mPaint.textSize = (scaledTextSize * 1.2).toFloat()
-                        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+                        mPaint.textSize = (scaledTextSize * 1.0).toFloat()
+                        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
                         val bounds = Rect()
                         mPaint.getTextBounds(value.label, 0, value.label.length, bounds)
-                        mPaint.style = Paint.Style.STROKE
+                        mPaint.style = Paint.Style.FILL
                         val py = graphTop + 20
                         canvas.drawText(value.label, endX, py, mPaint)
                         mPaint.strokeWidth = 5f
+                        mPaint.style = Paint.Style.STROKE
                         canvas.drawRect(endX - 3, bounds.top + py - 3, xPlusLength + 3, bounds.bottom + py + 3, mPaint)
                     }
                 } else if (value.shape == Shape.OPENAPS_OFFLINE && value.duration != 0L) {
@@ -286,13 +287,14 @@ class PointsWithLabelGraphSeries<E : DataPointWithLabelInterface> : BaseSeries<E
                     mPaint.strokeWidth = 0f
                     if (!value.label.isEmpty()) {
                         mPaint.strokeWidth = 0f
-                        mPaint.textSize = (scaledTextSize * 1.5).toFloat()
-                        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD))
+                        mPaint.textSize = (scaledTextSize * 1.0).toFloat()
+                        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL))
                         val bounds = Rect()
                         mPaint.getTextBounds(value.label, 0, value.label.length, bounds)
-                        mPaint.style = Paint.Style.STROKE
+                        mPaint.style = Paint.Style.FILL
                         val py = graphTop + 80
                         canvas.drawText(value.label, endX, py, mPaint)
+                        mPaint.style = Paint.Style.STROKE
                         mPaint.strokeWidth = 5f
                         canvas.drawRect(endX - 3, bounds.top + py - 3, xPlusLength + 3, bounds.bottom + py + 3, mPaint)
                     }

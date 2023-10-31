@@ -136,7 +136,9 @@ class MainApp : DaggerApplication() {
                                 InsertIfNewByTimestampTherapyEventTransaction(
                                     timestamp = dateUtil.now(),
                                     type = TherapyEvent.Type.NOTE,
-                                    note = rh.get().gs(app.aaps.core.ui.R.string.androidaps_start) + " - " + Build.MANUFACTURER + " " + Build.MODEL,
+                                    //note = rh.get().gs(app.aaps.core.ui.R.string.androidaps_start) + " - " + Build.MANUFACTURER + " " + Build.MODEL,
+                                    note = rh.get().gs(app.aaps.core.ui.R.string.androidaps_start) + " - " + android.provider.Settings
+                                        .Global.getString(getContentResolver(), android.provider.Settings.Global.DEVICE_NAME) + " - " + Build.MANUFACTURER + " " + Build.MODEL,
                                     glucoseUnit = TherapyEvent.GlucoseUnit.MGDL
                                 )
                             )
