@@ -8,11 +8,13 @@ import app.aaps.core.interfaces.sharedPreferences.SP
 import app.aaps.wear.R
 import app.aaps.wear.interaction.actions.BackgroundActionActivity
 import app.aaps.wear.interaction.actions.TempTargetActivity
-import javax.inject.Inject
-import javax.inject.Singleton
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 
-@Singleton
-class TempTargetSource @Inject constructor(context: Context, sp: SP, aapsLogger: AAPSLogger) : StaticTileSource(context, sp, aapsLogger) {
+@SingleIn(AppScope::class)
+@Inject
+class TempTargetSource(context: Context, sp: SP, aapsLogger: AAPSLogger) : StaticTileSource(context, sp, aapsLogger) {
 
     override val preferencePrefix = "tile_tempt_"
 
@@ -58,7 +60,7 @@ class TempTargetSource @Inject constructor(context: Context, sp: SP, aapsLogger:
             ),
             StaticAction(
                 settingName = "cancel",
-                buttonText = resources.getString(android.support.wearable.R.string.generic_cancel),
+                buttonText = resources.getString(R.string.temp_target_cancel),
                 iconRes = R.drawable.ic_target_cancel,
                 activityClass = BackgroundActionActivity::class.java.name,
                 message = message,

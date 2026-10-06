@@ -7,18 +7,55 @@ import app.aaps.core.interfaces.rx.weardata.EventData.TreatmentData.Basal
 import app.aaps.core.interfaces.sharedPreferences.SP
 import app.aaps.core.interfaces.utils.DateUtil
 import app.aaps.wear.R
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import lecho.lib.hellocharts.model.Axis
 import lecho.lib.hellocharts.model.AxisValue
 import lecho.lib.hellocharts.model.Line
 import lecho.lib.hellocharts.model.LineChartData
 import lecho.lib.hellocharts.model.PointValue
-import java.util.Calendar
-import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToLong
 
+/**
+ * Builds interactive blood glucose graph charts for Wear OS watchfaces.
+ *
+ * Creates a multi-layer line chart displaying:
+ * - Historical BG readings (color-coded by range: high/in-range/low)
+ * - Prediction lines (COB, IOB, UAM, ZT)
+ * - Treatment markers (boluses, carbs, temp basals)
+ * - Basal rate profile background
+ * - Target range lines
+ * - Time/value axes with grid
+ *
+ * The graph automatically scales to show configured time span (1-5 hours)
+ * and adjusts to accommodate predictions. Supports both full-color and
+ * low-resolution (ambient mode) rendering.
+ *
+ * @param sp SharedPreferences for user settings (grid, predictions, etc.)
+ * @param dateUtil Date utilities for time calculations
+ * @param bgDataList Historical BG readings to plot
+ * @param predictionsList Predicted future BG values (COB/IOB/UAM/ZT)
+ * @param tempWatchDataList Temporary basal rate changes to display
+ * @param basalWatchDataList Basal profile data for background
+ * @param bolusWatchDataList Bolus treatments to mark on graph
+ * @param pointSize Size of BG data points in pixels
+ * @param highColor Color for BG values above target range
+ * @param lowColor Color for BG values below target range
+ * @param midColor Color for BG values within target range
+ * @param gridColour Color for graph grid lines and axes
+ * @param basalBackgroundColor Background color for basal area
+ * @param basalCenterColor Center line color for basal profile
+ * @param bolusInvalidColor Color for invalid/aging bolus markers
+ * @param carbsColor Color for carb treatment markers
+ * @param timeSpan Time span to display in hours (1-5)
+ */
 class BgGraphBuilder(
     private val sp: SP,
     private val dateUtil: DateUtil,
@@ -51,7 +88,7 @@ class BgGraphBuilder(
     private val predictionEndTime: Long
         get() {
             var maxPredictionDate = System.currentTimeMillis()
-            for ((timeStamp) in predictionsList) {
+            for ((_, timeStamp) in predictionsList) {
                 if (maxPredictionDate < timeStamp) {
                     maxPredictionDate = timeStamp
                 }
@@ -64,7 +101,28 @@ class BgGraphBuilder(
             endingTime = max(predictionEndTime, endingTime)
     }
 
-    //used for low resolution screen.
+    /**
+     * Simplified constructor for low-resolution (ambient mode) rendering.
+     *
+     * Uses single color for all BG values (no range-based coloring) to comply
+     * with Wear OS ambient mode requirements (black and white only).
+     *
+     * @param sp SharedPreferences for user settings
+     * @param dateUtil Date utilities for time calculations
+     * @param aBgList Historical BG readings
+     * @param predictionsList Predicted BG values
+     * @param tempWatchDataList Temporary basal changes
+     * @param basalWatchDataList Basal profile data
+     * @param bolusWatchDataList Bolus treatments
+     * @param aPointSize Size of data points
+     * @param aMidColor Single color for all elements (typically white)
+     * @param gridColour Grid color (typically white)
+     * @param basalBackgroundColor Basal background (typically black)
+     * @param basalCenterColor Basal center line (typically white)
+     * @param bolusInvalidColor Bolus marker color
+     * @param carbsColor Carb marker color
+     * @param timeSpan Time span in hours
+     */
     constructor(
         sp: SP, dateUtil: DateUtil,
         aBgList: List<SingleBg>,
@@ -80,6 +138,22 @@ class BgGraphBuilder(
         basalBackgroundColor, basalCenterColor, bolusInvalidColor, carbsColor, timeSpan
     )
 
+    /**
+     * Build complete line chart data with all graph elements.
+     *
+     * Assembles the final chart by combining:
+     * 1. BG data lines (high/in-range/low values)
+     * 2. Prediction lines (COB, IOB, UAM, ZT if enabled)
+     * 3. Treatment lines (bolus, carbs, temp basals if enabled)
+     * 4. Target range lines (high/low marks)
+     * 5. Basal profile background (if enabled)
+     * 6. Axes and grid (if enabled in preferences)
+     *
+     * The chart automatically scales axes to fit all data points and
+     * configured time span.
+     *
+     * @return Complete LineChartData ready for rendering
+     */
     fun lineData(): LineChartData {
         val lineData = LineChartData(defaultLines())
         if (sp.getBoolean(R.string.key_show_graph_grid, true)) {
@@ -99,7 +173,7 @@ class BgGraphBuilder(
         lines.add(highValuesLine())
         var minChart = lowMark
         var maxChart = highMark
-        for ((_, _, _, _, _, _, _, _, _, sgv) in bgDataList) {
+        for ((_, _, _, _, _, _, _, _, _, _, sgv) in bgDataList) {
             if (sgv > maxChart) maxChart = sgv
             if (sgv < minChart) minChart = sgv
         }
@@ -215,7 +289,7 @@ class BgGraphBuilder(
 
     private fun addPredictionLines(lines: MutableList<Line>) {
         val values: MutableMap<Int, MutableList<PointValue>> = HashMap()
-        for ((timeStamp, _, _, _, _, _, _, _, _, sgv, _, _, color) in predictionsList) {
+        for ((_, timeStamp, _, _, _, _, _, _, _, _, sgv, _, _, color) in predictionsList) {
             if (timeStamp <= predictionEndTime) {
                 val value = min(sgv, UPPER_CUTOFF_SGV)
                 if (!values.containsKey(color)) {
@@ -280,7 +354,7 @@ class BgGraphBuilder(
     }
 
     private fun addBgReadingValues() {
-        for ((timeStamp, _, _, _, _, _, _, _, _, sgv) in bgDataList) {
+        for ((_, timeStamp, _, _, _, _, _, _, _, _, sgv) in bgDataList) {
             if (timeStamp > startingTime) {
                 when {
                     sgv >= 450      -> highValues.add(PointValue(fuzz(timeStamp), 450.toFloat()))
@@ -332,16 +406,14 @@ class BgGraphBuilder(
         val xAxisValues: MutableList<AxisValue> = ArrayList()
 
         //get the time-tick at the full hour after start_time
-        val startGC = GregorianCalendar()
-        startGC.timeInMillis = startingTime
-        startGC[Calendar.MILLISECOND] = 0
-        startGC[Calendar.SECOND] = 0
-        startGC[Calendar.MINUTE] = 0
-        startGC.add(Calendar.HOUR, 1)
+        val tz = TimeZone.currentSystemDefault()
+        val startLocal = kotlin.time.Instant.fromEpochMilliseconds(startingTime).toLocalDateTime(tz)
+        val truncatedHour = LocalDateTime(startLocal.year, startLocal.month, startLocal.day, startLocal.hour, 0)
+        var hourInstant = truncatedHour.toInstant(tz).plus(1, DateTimeUnit.HOUR, tz)
 
         //Display current time on the graph
         xAxisValues.add(AxisValue(fuzz(timeNow)).setLabel(dateUtil.timeString(timeNow)))
-        var hourTick = startGC.timeInMillis
+        var hourTick = hourInstant.toEpochMilliseconds()
 
         // add all full hours within the timeframe
         while (hourTick < endingTime) {
@@ -352,8 +424,9 @@ class BgGraphBuilder(
                 xAxisValues.add(AxisValue(fuzz(hourTick)).setLabel(""))
             }
 
-            //increment by one hour
-            hourTick += (60 * 60 * 1000).toLong()
+            //increment by one hour using wall-clock time to handle DST correctly
+            hourInstant = hourInstant.plus(1, DateTimeUnit.HOUR, tz)
+            hourTick = hourInstant.toEpochMilliseconds()
         }
         xAxis.values = xAxisValues
         xAxis.textSize = 10
