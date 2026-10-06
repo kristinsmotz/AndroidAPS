@@ -152,7 +152,7 @@ android {
         create("aapsclient") {
             applicationId = "info.nightscout.aapsclient"
             dimension = "standard"
-            resValue("string", "app_name", "AAPSClient")
+            resValue("string", "app_name", "ELLIOT AAPSClient")
             versionName = Versions.appVersion + "-aapsclient"
             manifestPlaceholders["appIcon"] = "@mipmap/ic_yellowowl"
             manifestPlaceholders["appIconRound"] = "@mipmap/ic_yellowowl"
@@ -160,7 +160,7 @@ android {
         create("aapsclient2") {
             applicationId = "info.nightscout.aapsclient2"
             dimension = "standard"
-            resValue("string", "app_name", "AAPSClient2")
+            resValue("string", "app_name", "EDVIN AAPSClient2")
             versionName = Versions.appVersion + "-aapsclient"
             manifestPlaceholders["appIcon"] = "@mipmap/ic_blueowl"
             manifestPlaceholders["appIconRound"] = "@mipmap/ic_blueowl"
