@@ -5,7 +5,7 @@
     <string name="omnipod_common_pod_management_button_deactivate_pod">Deactivate Pod</string>
     <string name="omnipod_common_pod_management_button_discard_pod">Discard Pod</string>
     <string name="omnipod_common_pod_management_discard_pod_confirmation">If you discard the Pod, you will not be able to communicate with it anymore. You should only do this when all communication with the Pod persistently fails. If you can still communicate with the Pod, please use the <b>Deactivate Pod</b> option.\n\nIf you wish to proceed, please make sure to remove the Pod from your body!</string>
-    <string name="omnipod_common_pod_management_button_play_test_beep">Play Test Beep</string>
+    <string name="omnipod_common_pod_management_button_play_test_beep">Hey pod! You alive?</string>
     <string name="omnipod_common_pod_management_button_pod_history">Pod History</string>
 
     <!-- Omnipod - Error -->
@@ -17,7 +17,7 @@
     <string name="omnipod_common_error_unsupported_custom_command">Unsupported custom command: %1$s</string>
     <string name="omnipod_common_error_failed_to_refresh_status">Failed to refresh status</string>
     <string name="omnipod_common_error_failed_to_refresh_status_on_startup">Failed to refresh status on startup</string>
-    <string name="omnipod_common_error_failed_to_silence_alerts">Failed to silence alerts</string>
+    <string name="omnipod_common_error_failed_to_silence_alerts">Don't wanna shush. Try again, then call tech mom</string>
     <string name="omnipod_common_error_failed_to_suspend_delivery">Failed to suspend delivery</string>
     <string name="omnipod_common_error_failed_to_set_time">Failed to set time</string>
     <string name="omnipod_common_error_failed_to_resume_delivery">Failed to resume delivery</string>
@@ -26,7 +26,7 @@
     <string name="omnipod_common_error_pod_fault_activation_time_exceeded">The Pod\'s activation time has been exceeded. This Pod can no longer be activated.</string>
     <string name="omnipod_common_error_failed_to_verify_activation_progress">Failed to verify activation progress. Please retry.</string>
     <string name="omnipod_common_error_pod_suspended">Pod suspended</string>
-    <string name="omnipod_common_error_failed_to_play_test_beep">Failed to play test beep</string>
+    <string name="omnipod_common_error_failed_to_play_test_beep">Failed to verify pod life signs. Try again, then call tech mom</string>
     <string name="omnipod_common_error_time_out_of_sync">The time on the Pod is out of sync. Please update the time in the Omnipod tab.</string>
     <string name="omnipod_common_error_unexpected_exception">An unexpected error occurred. Please report! (%1$s: %2$s).</string>
 
@@ -38,7 +38,7 @@
     <string name="omnipod_common_overview_button_set_time">Set time</string>
     <string name="omnipod_common_overview_button_suspend_delivery">Suspend</string>
     <string name="omnipod_common_overview_button_resume_delivery">Resume Delivery</string>
-    <string name="omnipod_common_overview_button_silence_alerts">Silence Alerts</string>
+    <string name="omnipod_common_overview_button_silence_alerts">STFU</string>
     <string name="omnipod_common_overview_pod_status">Pod Status</string>
     <string name="omnipod_common_overview_total_delivered">Total Delivered</string>
     <string name="omnipod_common_overview_pod_unique_id">Unique ID</string>
@@ -49,7 +49,7 @@
     <string name="omnipod_common_overview_last_bolus">Last Bolus</string>
     <string name="omnipod_common_overview_temp_basal_rate">Temp Basal Rate</string>
     <string name="omnipod_common_overview_base_basal_rate">Base Basal Rate</string>
-    <string name="omnipod_common_overview_pod_active_alerts">Active Pod Alerts</string>
+    <string name="omnipod_common_overview_pod_active_alerts">Oof.. Pod has OPINIONS</string>
     <string name="omnipod_common_overview_firmware_version">Firmware Version</string>
     <string name="omnipod_common_overview_time_on_pod">Time on Pod</string>
     <string name="omnipod_common_uncertain">uncertain</string>
@@ -96,8 +96,8 @@
     <string name="omnipod_common_preferences_expiration_alarm_enabled">Expiration alert enabled</string>
     <string name="omnipod_common_preferences_expiration_alarm_enabled_summary">When enabled the pod will beep when the specified time is reached and 1 hour before shutdown</string>
     <string name="omnipod_common_preferences_expiration_alarm_hours_before_shutdown">Alert at hours before shutdown (80 Hours)</string>
-    <string name="omnipod_common_preferences_low_reservoir_alert_enabled">Low reservoir alert enabled</string>
-    <string name="omnipod_common_preferences_low_reservoir_alert_units">Number of units</string>
+    <string name="omnipod_common_preferences_low__alert_enabled">Low  alert enabled</string>
+    <string name="omnipod_common_preferences_low__alert_units">Number of units</string>
     <string name="omnipod_common_preferences_automatically_silence_alerts">Automatically silence Pod alerts</string>
     <string name="omnipod_common_preferences_category_other">Other</string>
     <string name="omnipod_common_preferences_category_alerts">Alerts</string>
@@ -118,7 +118,7 @@
     <string name="omnipod_common_pod_status_suspended">Suspended</string>
     <string name="omnipod_common_pod_status_pod_fault">Pod Fault</string>
     <string name="omnipod_common_pod_status_inactive">Inactive</string>
-    <string name="omnipod_common_pod_status_pod_fault_description">Pod Fault: %1$03d %2$s</string>
+    <string name="omnipod_common_pod_status_pod_fault_description">Pod fault! Cause of death: %1$03d %2$s</string>
 
     <!-- Omnipod - PDM Notification -->
     <string name="omnipod_common_pdm_notification_label">PDM Notification</string>
@@ -127,7 +127,7 @@
     <!-- Fault header/text shown as if the Dash PDM itself had shown it, so the user can report the fault
          to Insulet as if they had used a PDM. One header + one text per PDM-style fault category (see
          AlarmType.pdmFaultCategory / PdmFaultCategory). -->
-    <string name="omnipod_common_pdm_notification_header_reservoir_empty">Empty Reservoir</string>
+    <string name="omnipod_common_pdm_notification_header__empty">Empty Reservoir</string>
     <string name="omnipod_common_pdm_notification_text_reservoir_empty">Insulin delivery stopped. Change Pod now.</string>
     <string name="omnipod_common_pdm_notification_header_auto_off">Auto-Off</string>
     <string name="omnipod_common_pdm_notification_text_auto_off">Insulin delivery stopped. Your PDM and Pod have not communicated in the last 4 hours. To resume insulin delivery, change Pod now.</string>
@@ -140,9 +140,9 @@
 
     <!-- Omnipod - Alerts -->
     <string name="omnipod_common_alert_expiration">Pod will expire soon</string>
-    <string name="omnipod_common_alert_expiration_advisory">Pod will expire soon</string>
-    <string name="omnipod_common_alert_shutdown_imminent">Shutdown is imminent</string>
-    <string name="omnipod_common_alert_low_reservoir">Low Reservoir</string>
+    <string name="omnipod_common_alert_expiration_advisory">Pod will expire soon. Prepare for pod change.</string>
+    <string name="omnipod_common_alert_shutdown_imminent">Beware! Pod will death scream soon! Please replace!</string>
+    <string name="omnipod_common_alert_low_reservoir">Running low on insulin. Consider pod change</string>
     <string name="omnipod_common_alert_unknown_alert">Unknown Alert</string>
 
     <!-- Omnipod - Commands -->
@@ -215,4 +215,5 @@
     <string name="omnipod_common_command_not_sent">Command not sent</string>
     <string name="omnipod_common_command_not_received_by_the_pod">Command not received by the pod</string>
     <string name="omnipod_common_unknown">Unknown state for the command</string>
+</resources>
 </resources>

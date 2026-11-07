@@ -7,7 +7,7 @@
     <string name="insulin_label">Insulin</string>
     <string name="pb_label">Pump battery</string>
     <string name="cannula">Cannula</string>
-    <string name="patch_pump">Patch pump</string>
+    <string name="patch_pump">Pod</string>
 
     <!-- Overview -->
 
