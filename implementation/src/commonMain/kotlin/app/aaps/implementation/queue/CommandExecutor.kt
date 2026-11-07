@@ -8,23 +8,25 @@ import app.aaps.core.interfaces.concurrent.withLock
 import app.aaps.core.interfaces.configuration.Config
 import app.aaps.core.interfaces.logging.AAPSLogger
 import app.aaps.core.interfaces.logging.LTag
+import app.aaps.core.interfaces.notifications.NotificationId
+import app.aaps.core.interfaces.notifications.NotificationManager
 import app.aaps.core.interfaces.plugin.ActivePlugin
 import app.aaps.core.interfaces.pump.BolusProgressData
 import app.aaps.core.interfaces.pump.VirtualPump
 import app.aaps.core.interfaces.queue.CommandQueue
-import app.aaps.core.ui.CoreUiStrings
 import app.aaps.core.interfaces.resources.TextResolver
 import app.aaps.core.interfaces.rx.bus.RxBus
 import app.aaps.core.interfaces.rx.events.EventPumpStatusChanged
 import app.aaps.core.interfaces.rx.events.EventQueueChanged
-import app.aaps.core.interfaces.rx.events.EventShowSnackbar
 import app.aaps.core.interfaces.utils.fabric.FabricPrivacy
 import app.aaps.core.keys.BooleanKey
 import app.aaps.core.keys.LongNonKey
 import app.aaps.core.keys.interfaces.Preferences
+import app.aaps.core.ui.CoreUiStrings
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CancellationException
-import kotlin.concurrent.Volatile
-import kotlin.time.Clock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -35,9 +37,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.SingleIn
-import dev.zacsweers.metro.Inject
+import kotlin.concurrent.Volatile
+import kotlin.time.Clock
 
 /**
  * App-owned host for the pump command loop. Replaces the WorkManager `QueueWorker`.
@@ -69,7 +70,8 @@ class CommandExecutor(
     private val preferences: Preferences,
     private val config: Config,
     private val bolusProgressData: BolusProgressData,
-    private val platform: CommandExecutionPlatform
+    private val platform: CommandExecutionPlatform,
+    private val notificationManager: NotificationManager
 ) {
 
     // One command at a time: guarantees strict command ordering and isolates long blocking BLE I/O
@@ -180,14 +182,23 @@ class CommandExecutor(
                     rxBus.send(EventPumpStatusChanged(EventPumpStatusChanged.Status.DISCONNECTED))
                     return
                 }
-                if (config.PUMPDRIVERS && pump.selectedActivePump() !is VirtualPump)
-                    if (!platform.hasBluetoothPermission()) {
-                        rxBus.send(EventShowSnackbar(rh.gs(CoreUiStrings.need_connect_permission), EventShowSnackbar.Type.Error))
-                        aapsLogger.debug(LTag.PUMPQUEUE, "no permission")
-                        rxBus.send(EventPumpStatusChanged(EventPumpStatusChanged.Status.CONNECTING))
-                        delay(5000)
-                        continue
-                    }
+                if (config.PUMPDRIVERS && pump.selectedActivePump() !is VirtualPump && !platform.hasBluetoothPermission()) {
+                    // No command can reach the pump, so fail them now, with the real reason (#5440). This used to
+                    // wait in a loop with a snackbar every 5 s, and a bolus that waited was given whenever the
+                    // permission came back, maybe hours late. Waiting does not help: Android stops the app when a
+                    // permission is taken away, so it only comes back when the user allows it.
+                    aapsLogger.debug(LTag.PUMPQUEUE, "no Bluetooth permission - failing the queue")
+                    // Posted only when not shown yet: posting again replaces it with a new date and raises the
+                    // Android notification again. It removes itself once the permission is back.
+                    if (notificationManager.notifications.value.none { it.id == NotificationId.BLUETOOTH_PERMISSION_MISSING })
+                        notificationManager.post(
+                            NotificationId.BLUETOOTH_PERMISSION_MISSING, CoreUiStrings.need_connect_permission,
+                            validityCheck = { !platform.hasBluetoothPermission() }
+                        )
+                    queue.clear(CoreUiStrings.need_connect_permission)
+                    rxBus.send(EventPumpStatusChanged(EventPumpStatusChanged.Status.DISCONNECTED))
+                    return
+                }
                 if (!pump.isConnected() && secondsElapsed > Constants.PUMP_MAX_CONNECTION_TIME_IN_SECONDS) {
                     bolusProgressData.clear()
                     rxBus.send(EventPumpStatusChanged(rh.gs(CoreUiStrings.connectiontimedout)))

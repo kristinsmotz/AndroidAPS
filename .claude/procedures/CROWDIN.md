@@ -138,7 +138,172 @@ curl -s -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/
   `--import-eq-suggestions` would import them too.
 - **A hand-written translation in a short folder** (e.g. `values-ko` next to Crowdin's
   `values-ko-rKR`) is not what Crowdin reads or writes. To bring it in, copy it into the temp
-  workspace under the Crowdin folder name (`values-ko-rKR`) and upload with `-l <lang>`.
+  workspace under the Crowdin folder name (`values-ko-rKR`) and upload with `-l <lang>`. Then
+  delete the short folder, or Korean lives in two places and drifts (carelevo's `values-ko` was
+  deleted on 2026-10-15 for this reason).
+- **Changing the placeholders of an English string drops its translations on Crowdin.** Numbering
+  `%s %s` to `%1$s %2$s` (carelevo, 2026-09-29) left those strings untranslated in every language.
+  The old text is still offered by translation memory; enter it again with the new placeholders
+  and approve it.
+- **Crowdin QA can block Save for a correct text**, e.g. the Korean grammar marker `(으)로` is
+  reported as "extra symbol". Use "Save Anyway".
+
+## Wiki links in strings
+
+The objectives and exam hints (and a few other strings) link to the wiki. Each language should
+open the wiki in its own language when there is one.
+
+- **Wiki languages:** cs de el en es fr he ko lt nl ru tr zh-cn zh-tw, as
+  `https://wiki.aaps.app/<code>/latest/...`. The translated docs have no `dev` build, so a
+  translation always points to `latest`. A page that exists only in English `dev` gets no
+  translations at all.
+- **In Crowdin:** for a wiki language the translation is the English link with that language's
+  code, approved. Slovak gets the Czech wiki (close language, better than English). Every other
+  language opens the English page: either it has no translation, or a plain copy of the English
+  link. A copy is harmless - a later change of the English link drops it anyway. Do not delete
+  copies: translators of other languages add them again within minutes to reach 100% (Italian and
+  Norwegian did on 2026-10-15). Only a link to a *different* page or language needs fixing.
+- **Language ids:** Crowdin `es-ES` → `es`, `zh-CN` → `zh-cn`, `zh-TW` → `zh-tw`, `sk` → `cs`;
+  the others are the same.
+- **Anchors: use the fixed label, never the heading anchor.** `#the-homescreen` is made from the
+  heading text, so on a translated page it is `#die-startseite` or `#id2` and the link opens the
+  top of the page. The docs source has labels such as `(AapsScreens-the-homescreen)=` before a
+  heading; they are not translated and become `#aapsscreens-the-homescreen` (lower case) in every
+  language. Check the label on the translated pages before using it.
+- **A section with no label:** add one in AndroidAPSdocs (`docs/EN/...`, `(Page-name)=` on the
+  line before the heading). In the AndroidAPSdocs Crowdin project, mark the new label string
+  **hidden**, like the existing ones, so translators never see it. The translated pages get the
+  label only with the next docs Crowdin export.
+- **Changing an English link drops all its translations on Crowdin.** After the sync, set the
+  wiki languages again. Handy when anchors change: there is nothing old left to delete.
+- **Many links × 30 languages is not a job for the web editor.** Use API v2 with a small script:
+  list the strings of the file, `DELETE /translations?stringId=&languageId=`,
+  `POST /translations`, `POST /approvals`. Run it as a dry run first, and again after applying,
+  until it reports nothing left to change.
+
+## Fixing one string in the web editor
+
+Without an API token, the editor is the only way, and every click has to be confirmed in the
+browser extension, so it suits a handful of strings at most.
+
+- **Fastest: a direct link to the string.** `https://crowdin.com/editor/androidaps/<fileId>/en-<lang>#<stringId>`
+  opens the string already selected, in any language. Find both ids once: open the file in the
+  editor, and the string's list item has the id `phrase_<stringId>`. Example: `tdd_line` in
+  `plugins/sync` is file `5835`, string `216755`.
+- Otherwise open `https://crowdin.com/editor/androidaps/all/en-<lang>?search_scope=everything` and
+  type the string **key** in "Search strings" (the search matches keys too). Changing only `#q=` in
+  the URL does not search again.
+- `<lang>` is the editor slug, not the Android code and not always the Crowdin code: `es-ES` is `es`,
+  `pt-PT` is `pt`, `zh-TW` is `zhtw`, `he` is `he`. A wrong slug shows a language picker. The
+  language page `https://crowdin.com/project/androidaps/<Crowdin code>` links to the right slug.
+- With the browser extension, the first search or typing after a page load is often lost. Check
+  with a screenshot and type again.
+- Saving adds a new translation next to the old one. Approve the new one - that removes approval
+  from the old one. Only approved text is exported.
+- After Save the editor moves on to the next search result, so check which string is selected
+  before you approve.
+
+## Seeing the aapt warnings about translations
+
+aapt prints "Multiple substitutions specified in non-positional format" only when it really merges
+the resources. With the build cache on (`org.gradle.caching=true`), even a build after `clean` takes
+the merge from the cache and prints nothing. Force only the merge tasks to run:
+
+```bash
+./gradlew.bat :app:mergeFullDebugResources --rerun :wear:mergeFullDebugResources --rerun --no-daemon --console=plain > res.log 2>&1
+grep "Multiple substitutions" res.log
+```
+
+aapt does not see everything. A translation can use the wrong type (`%1$.0f` for an `Int`), the
+wrong number (`%1$d` twice), a broken placeholder (`%2$小時`) or a single `%` in a formatted
+string, and the build stays silent. These need a placeholder comparison against English.
+`rh.gs()` catches the error and shows English instead; `stringResource()` in Compose crashes.
+
+## Checking a "New Crowdin updates" pull request before merge
+
+No CI runs on the `l10n_dev` pull requests, so nothing else checks them. Run this from the repo
+root, with the merge base and the fetched branch:
+
+```bash
+git fetch origin dev l10n_dev
+node crowdin-pr-check.js $(git merge-base origin/dev origin/l10n_dev) origin/l10n_dev > check.log
+```
+
+It looks only at translations the pull request changes and compares each with English in the same
+module: placeholders (index and type), a missing placeholder, a `%` that starts no valid
+placeholder in a string that has arguments, more than one unnumbered placeholder, and an
+unescaped apostrophe. No API token is needed.
+
+Read every line yourself, many are harmless:
+
+- **A literal `%` in a text without arguments is fine**, like `70%` or `50 %-profil`. The text is
+  shown without arguments, so it is never formatted. The script does not know how the code uses a
+  string; check with `git grep` when English has no placeholders either.
+- **A missing placeholder does not crash**, the value is only not shown (German `a11y_bg_delta`
+  was `Delta` without `%1$s`, 2026-10-31). Fix it in Crowdin anyway.
+- **"type differs" with `s` in the translation is harmless**: `%1$s` prints a number too. `d` or
+  `f` where English has `s` crashes in Compose.
+
+Also check that the English files the pull request changes ("Update source file strings.xml") are
+the same as in `dev` (`git diff origin/dev origin/l10n_dev -- '*/values/*.xml'` must be empty),
+and that `git merge-tree --write-tree origin/dev origin/l10n_dev` merges cleanly. Crowdin copies
+the English sources from `dev`; a difference means `dev` was not fetched or moved on since.
+
+```js
+// node crowdin-pr-check.js <base ref> <head ref>
+const { execFileSync } = require('child_process')
+const [base, head] = process.argv.slice(2)
+const git = (...a) => execFileSync('git', a, { encoding: 'utf8', maxBuffer: 1 << 28 })
+const show = (ref, p) => { try { return git('show', `${ref}:${p}`) } catch { return null } }
+
+// name -> { text, attrs }; a plural item as name#quantity
+function parse(xml) {
+  const out = new Map()
+  if (!xml) return out
+  for (const m of xml.matchAll(/<string\s+([^>]*?)(?:\/>|>([\s\S]*?)<\/string>)/g)) {
+    const name = /name="([^"]+)"/.exec(m[1])?.[1]
+    if (name) out.set(name, { text: m[2] ?? '', attrs: m[1] })
+  }
+  for (const m of xml.matchAll(/<plurals\s+([^>]*)>([\s\S]*?)<\/plurals>/g)) {
+    const name = /name="([^"]+)"/.exec(m[1])?.[1]
+    for (const i of m[2].matchAll(/<item\s+quantity="([^"]+)"\s*>([\s\S]*?)<\/item>/g))
+      out.set(`${name}#${i[1]}`, { text: i[2], attrs: m[1], plural: true })
+  }
+  return out
+}
+
+// aapt drops the backslash of an unknown escape, so \%2$d is still a placeholder at run time
+const SPEC = /%(?:(\d+)\$)?[-#+0,(<]*\d*(?:\.\d+)?([sdfxXcegob])/g
+const LONE = /%(?!(\d+\$)?[-#+0,(<]*\d*(\.\d+)?[sdfxXcegob])/g
+const kind = t => ('s'.includes(t) ? 's' : 'dxXo'.includes(t) ? 'd' : 'feg'.includes(t) ? 'f' : t)
+const keys = text => [...text.replace(/%%/g, '').matchAll(SPEC)].map(m => `${m[1] ?? '-'}${kind(m[2])}`)
+
+const files = git('diff', '--name-only', base, head).split('\n')
+  .filter(f => /\/values-[a-z]{2,3}(-r[A-Z]{2})?\/[^/]+\.xml$/.test(f))
+let checked = 0
+for (const f of files) {
+  const xml = show(head, f)
+  if (xml == null) continue
+  if (!/<\/resources>\s*$/.test(xml)) console.log(`${f} | - | <resources> not closed`)
+  const tr = parse(xml), old = parse(show(base, f)), en = parse(show(head, f.replace(/\/values-[^/]+\//, '/values/')))
+  for (const [name, { text }] of tr) {
+    if (old.get(name)?.text === text) continue // not changed by this pull request
+    checked++
+    const say = msg => console.log(`${f} | ${name} | ${msg}: ${text.slice(0, 80)}`)
+    const english = en.get(name) || en.get(`${name.split('#')[0]}#other`)
+    if (!english) { say('no English string'); continue }
+    if (text.replace(/\\./g, '').replace(/"[^"]*"/g, '').includes("'")) say('unescaped apostrophe')
+    if (/formatted="false"/.test(english.attrs)) continue
+    const e = keys(english.text), t = keys(text)
+    if (e.length && (text.replace(/%%/g, '').match(LONE) || []).length) say('% that is no placeholder')
+    if (t.filter(k => k.startsWith('-')).length > 1) say('several unnumbered placeholders')
+    for (const k of t) if (!e.includes(k))
+      say(e.some(x => x.slice(0, -1) === k.slice(0, -1)) ? `type differs: ${k}, English ${e}` : `not in English: ${k}`)
+    if (!english.plural) for (const k of e) if (!t.includes(k)) say(`missing placeholder ${k}`)
+  }
+}
+console.log(`${files.length} files, ${checked} changed strings checked`)
+```
 
 ## Moving a source file
 

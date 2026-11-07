@@ -6,9 +6,6 @@ import android.os.SystemClock
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.work.WorkManager
-import app.aaps.di.ResetGraphRule
-import app.aaps.di.testGraphs
-import app.aaps.pump.equil.di.EquilAccessors
 import app.aaps.core.data.model.RM
 import app.aaps.core.data.plugin.PluginType
 import app.aaps.core.data.time.T
@@ -19,7 +16,6 @@ import app.aaps.core.interfaces.profile.Profile
 import app.aaps.core.interfaces.pump.DetailedBolusInfo
 import app.aaps.core.interfaces.pump.PumpSync
 import app.aaps.core.interfaces.queue.Command
-import app.aaps.core.interfaces.queue.CommandQueue
 import app.aaps.core.keys.BooleanComposedKey
 import app.aaps.core.keys.BooleanKey
 import app.aaps.core.keys.BooleanNonKey
@@ -27,19 +23,19 @@ import app.aaps.core.keys.StringKey
 import app.aaps.core.objects.extensions.singleBlock
 import app.aaps.core.objects.extensions.singleTargetBlock
 import app.aaps.di.EmulatedOptions
-import app.aaps.pump.equil.EquilPumpPlugin
-import app.aaps.pump.equil.ble.EquilBleTransport
+import app.aaps.di.ResetGraphRule
+import app.aaps.di.testGraphs
 import app.aaps.pump.equil.compose.EquilHistoryViewModel
 import app.aaps.pump.equil.compose.EquilOverviewViewModel
 import app.aaps.pump.equil.compose.EquilWizardStep
 import app.aaps.pump.equil.compose.EquilWizardViewModel
 import app.aaps.pump.equil.compose.EquilWorkflow
 import app.aaps.pump.equil.data.RunMode
+import app.aaps.pump.equil.di.EquilAccessors
 import app.aaps.pump.equil.driver.definition.ActivationProgress
 import app.aaps.pump.equil.driver.definition.EquilHistoryEntryGroup
 import app.aaps.pump.equil.emulator.EquilEmulatorBleTransport
 import app.aaps.pump.equil.keys.EquilStringKey
-import app.aaps.pump.equil.manager.EquilManager
 import app.aaps.pump.equil.manager.command.CmdModelSet
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
@@ -52,7 +48,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import java.io.File
 
 /**
  * Drives the **real Equil activation wizard** against the in-tree Equil emulator, headlessly (no
@@ -498,13 +493,7 @@ class EquilEmulatorActivationTest {
         return null
     }
 
-    private fun clearAllSharedPrefs() {
-        val ctx = instrumentation.targetContext
-        File(ctx.applicationInfo.dataDir, "shared_prefs").listFiles()?.forEach { f ->
-            if (f.name.endsWith(".xml"))
-                ctx.getSharedPreferences(f.name.removeSuffix(".xml"), Context.MODE_PRIVATE).edit().clear().commit()
-        }
-    }
+    private fun clearAllSharedPrefs() = clearAppSettings(instrumentation.targetContext)
 
     companion object {
 

@@ -14,7 +14,6 @@ import app.aaps.core.interfaces.aps.APS
 import app.aaps.core.interfaces.configuration.Config
 import app.aaps.core.interfaces.notifications.NotificationId
 import app.aaps.core.interfaces.notifications.NotificationManager
-import app.aaps.core.interfaces.nsclient.ProcessedDeviceStatusData
 import app.aaps.core.interfaces.plugin.ActivePlugin
 import app.aaps.core.interfaces.profile.EffectiveProfile
 import app.aaps.core.interfaces.profile.Profile
@@ -81,6 +80,10 @@ sealed class ProfileSealed(
     ), EffectiveProfile {
 
         override val iCfg: ICfg = value.iCfg
+
+        /** The running profile was made from this switch when it links to it. Without a link (older records) the values decide. */
+        override fun isAppliedAs(running: Profile): Boolean =
+            (running is EPS && value.id != 0L && running.value.originalPsId == value.id) || isEqual(running)
     }
 
     /**
@@ -261,6 +264,7 @@ sealed class ProfileSealed(
                         notificationManager.post(NotificationId.BASAL_PROFILE_NOT_ALIGNED_TO_HOURS, InterfacesStrings.basalprofilenotaligned.withArgs(from))
                     }
                     validityCheck.isValid = false
+                    validityCheck.basalProblem = Profile.BasalProblem.NOT_ALIGNED_TO_HOURS
                     validityCheck.reasons.add(
                         rh.gs(InterfacesStrings.basalprofilenotaligned, from)
                     )
@@ -271,11 +275,13 @@ sealed class ProfileSealed(
             if (basalAmount < description.basalMinimumRate) {
                 if (sendNotifications) sendBelowMinimumNotification(from, notificationManager, rh)
                 validityCheck.isValid = false
+                validityCheck.basalProblem = Profile.BasalProblem.BELOW_PUMP_MINIMUM
                 validityCheck.reasons.add(rh.gs(InterfacesStrings.minimalbasalvaluereplaced, from))
                 break
             } else if (basalAmount > description.basalMaximumRate) {
                 if (sendNotifications) sendAboveMaximumNotification(from, notificationManager, rh)
                 validityCheck.isValid = false
+                validityCheck.basalProblem = Profile.BasalProblem.ABOVE_PUMP_MAXIMUM
                 validityCheck.reasons.add(rh.gs(InterfacesStrings.maximumbasalvaluereplaced, from))
                 break
             }
@@ -340,15 +346,6 @@ sealed class ProfileSealed(
         if (aps?.usingDynamicIsf() ?: error("APS not defined"))
             aps.getIsfMgdl(this, caller) ?: toMgdl(isfBlocks.blockValueBySeconds(MidnightUtils.secondsFromMidnight(), 100.0 / percentage, timeshift), units)
         else getProfileIsfMgdl()
-
-    override fun getIsfMgdlForCarbs(timestamp: Long, caller: String, config: Config, processedDeviceStatusData: ProcessedDeviceStatusData): Double =
-        if (config.AAPSCLIENT) {
-            processedDeviceStatusData.getAPSResult()?.isfMgdlForCarbs ?: toMgdl(isfBlocks.blockValueBySeconds(MidnightUtils.secondsFromMidnight(timestamp), 100.0 / percentage, timeshift), units)
-        } else {
-            if (aps?.usingDynamicIsf() ?: error("APS not defined"))
-                aps.getAverageIsfMgdl(timestamp, caller) ?: toMgdl(isfBlocks.blockValueBySeconds(MidnightUtils.secondsFromMidnight(timestamp), 100.0 / percentage, timeshift), units)
-            else toMgdl(isfBlocks.blockValueBySeconds(MidnightUtils.secondsFromMidnight(timestamp), 100.0 / percentage, timeshift), units)
-        }
 
     override fun getTargetMgdl(): Double = toMgdl(targetBlocks.targetBlockValueBySeconds(MidnightUtils.secondsFromMidnight(), timeshift), units)
     override fun getTargetLowMgdl(): Double = toMgdl(targetBlocks.lowTargetBlockValueBySeconds(MidnightUtils.secondsFromMidnight(), timeshift), units)

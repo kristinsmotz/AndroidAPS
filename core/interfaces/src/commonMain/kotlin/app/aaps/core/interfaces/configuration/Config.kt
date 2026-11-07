@@ -2,9 +2,12 @@ package app.aaps.core.interfaces.configuration
 
 import app.aaps.core.keys.interfaces.AppPlatform
 import app.aaps.core.keys.interfaces.TextRef
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withTimeoutOrNull
 
 /**
@@ -124,6 +127,13 @@ interface Config {
      * without a default: a new shell has to say what it is rather than inherit someone else's answer.
      */
     val platform: AppPlatform
+
+    /**
+     * Whether AAPS can be shown in a language of its own, other than the phone's. Android gives apps their own
+     * language from Android 13 on; on Android 12 AAPS follows the phone, and the language setting is hidden.
+     * True where the app sets its text language itself (iOS, desktop).
+     */
+    val supportsAppLanguage: Boolean get() = true
     val APPLICATION_ID: String
     val DEBUG: Boolean
     val currentDeviceModelString: String
@@ -170,7 +180,7 @@ interface Config {
      *
      * Prefer [whileReconfiguring] - it pairs this with [endReconfiguring] in a `finally`. Calling this
      * without a guaranteed matching end leaves [appInitialized] false for the rest of the process, and
-     * `WizardBolusExecutorImpl` refuses on that in two places: the user could not bolus. That is worse
+     * `MasterActionExecutorImpl` refuses on that in two places: the user could not bolus. That is worse
      * than the window this closes.
      */
     fun beginReconfiguring()
@@ -203,6 +213,16 @@ suspend fun Config.awaitInitialized(timeoutMs: Long = 30_000L): Boolean {
         initProgressFlow.first { it.done && !it.reconfiguring }
     } != null
 }
+
+/**
+ * [Config.appInitialized] as a flow: the current value first, then every change.
+ *
+ * For work that must not run before init completes and must run as soon as it has. Checking
+ * [Config.appInitialized] once is not enough for that: the work is skipped, and then waits for some
+ * other trigger to come along.
+ */
+val Config.appInitializedFlow: Flow<Boolean>
+    get() = initProgressFlow.map { it.done && !it.reconfiguring }.distinctUntilChanged()
 
 /**
  * Run [block] with plugin state marked as being rebuilt, and always unmark it afterwards.

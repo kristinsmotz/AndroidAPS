@@ -3,7 +3,6 @@ package app.aaps
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -77,30 +76,30 @@ import app.aaps.core.interfaces.sync.NsClient
 import app.aaps.core.interfaces.ui.IconsProvider
 import app.aaps.core.interfaces.ui.SnackbarHostPresence
 import app.aaps.core.interfaces.ui.UiInteraction
+import app.aaps.core.interfaces.ui.UiRestart
 import app.aaps.core.interfaces.utils.DateUtil
 import app.aaps.core.interfaces.utils.DecimalFormatter
 import app.aaps.core.interfaces.utils.fabric.FabricPrivacy
 import app.aaps.core.keys.BooleanKey
-import app.aaps.core.keys.BooleanNonKey
-import app.aaps.core.interfaces.ui.UiRestart
 import app.aaps.core.keys.StringKey
 import app.aaps.core.keys.interfaces.Preferences
 import app.aaps.core.keys.interfaces.VisibilityContext
 import app.aaps.core.objects.crypto.CryptoUtil
-import app.aaps.core.ui.compose.MetroAppCompatActivity
 import app.aaps.core.ui.compose.FallbackViewModelFactory
+import app.aaps.core.ui.compose.MetroAppCompatActivity
 import app.aaps.core.ui.compose.MetroViewModelFactoryOwner
 import app.aaps.core.ui.compose.navigation.NavigationRequest
-import app.aaps.core.ui.compose.pump.PumpActivityDialog
 import app.aaps.core.ui.compose.pump.PumpCommunicationStatus
-import app.aaps.core.ui.locale.LocaleHelper
 import app.aaps.core.utils.isRunningRealPumpTest
+import app.aaps.implementation.androidNotification.AlarmNotificationManager
 import app.aaps.implementation.plugin.PluginPermissionsImpl
 import app.aaps.implementation.protection.BiometricCheck
 import app.aaps.plugins.automation.AutomationRuntime
 import app.aaps.plugins.configuration.setupwizard.SWDefinition
 import app.aaps.plugins.source.DexcomPlugin
 import app.aaps.plugins.source.activities.RequestDexcomPermissionActivity
+import app.aaps.settingsstore.AndroidStorage
+import app.aaps.settingsstore.SettingsUnreadableActivity
 import app.aaps.ui.compose.configuration.ConfigurationViewModel
 import app.aaps.ui.compose.insulinManagement.InsulinManagementViewModel
 import app.aaps.ui.compose.loopSheet.LoopActionViewModel
@@ -167,6 +166,7 @@ class ComposeMainActivity : MetroAppCompatActivity() {
     @Inject lateinit var persistenceLayer: PersistenceLayer
     @Inject lateinit var prefFileList: FileListProvider
     @Inject lateinit var notificationManager: NotificationManager
+    @Inject lateinit var alarmNotificationManager: AlarmNotificationManager
     @Inject lateinit var dateUtil: DateUtil
     @Inject lateinit var builtInSearchables: BuiltInSearchables
     @Inject lateinit var bolusProgressData: BolusProgressData
@@ -180,6 +180,9 @@ class ComposeMainActivity : MetroAppCompatActivity() {
     private var accessTree: ActivityResultLauncher<Uri?>? = null
     private var requestMultiplePermissions: ActivityResultLauncher<Array<String>>? = null
     private var onPermissionResultDenied: ((List<String>) -> Unit)? = null
+
+    /** Set when this activity is recreated because of a `UiRestart` request, so its view models go too. */
+    private var rebuildingForRestart = false
 
     /**
      * The factory `by viewModels()` uses.
@@ -231,11 +234,28 @@ class ComposeMainActivity : MetroAppCompatActivity() {
     private val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (AndroidStorage.failure != null) {
+            // The settings cannot be opened, and AAPS is not started. This activity is not injected then (see
+            // MainApp.injectMembers): it only hands over. finish() here skips onStart and onResume.
+            super.onCreate(savedInstanceState)
+            startActivity(Intent(this, SettingsUnreadableActivity::class.java))
+            finish()
+            return
+        }
+        // Recreated in another language: the one picked in AAPS (Android 13 and newer), or the phone's while AAPS
+        // follows it. Android recreates this screen itself then, and keeps the view models, with the text they built in
+        // the old language. So they go. Before super.onCreate, so that none is made from the old store first.
+        if (savedInstanceState != null && savedInstanceState.getString(STATE_LANGUAGE) != resources.configuration.locales.toLanguageTags())
+            viewModelStore.clear()
         // Bar icon color is kept in sync with the AAPS-effective theme reactively
         // from inside AapsTheme via a SideEffect on WindowInsetsControllerCompat,
         // so a plain enableEdgeToEdge() here is enough.
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        // Other apps may not draw over AAPS: an overlay could hide what a tap really does, for example on a bolus
+        // confirmation. It also covers the dialogs, because this window stays visible under them. System and
+        // accessibility overlays still show. Needs HIDE_OVERLAY_WINDOWS.
+        window.setHideOverlayWindows(true)
 
         // Activity result launchers (from base class)
         accessTree = registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
@@ -313,12 +333,19 @@ class ComposeMainActivity : MetroAppCompatActivity() {
             rxBus = rxBus,
             snackbarHostPresence = snackbarHostPresence,
             clientControlActionDispatcher = clientControlActionDispatcher,
+            bolusProgressData = bolusProgressData,
+            commandQueue = commandQueue,
+            pumpCommunicationStatus = pumpCommunicationStatus,
             // The two per-build bitmaps the shared root cannot paint itself.
             appIcon = { modifier -> Image(painterResource(iconsProvider.getIcon()), null, modifier) },
             splashLogo = { modifier -> Image(painterResource(CoreUiR.drawable.splash_logo), null, modifier) },
             // The Activity keeps a reference so an incoming intent can route without the composition.
             onNavControllerReady = { navController = it },
             onClose = { finish() },
+            // An instrumented pump test starts with an empty preference store, so without this every
+            // one of them would open the wizard instead of the screen it means to drive. The check is
+            // androidMain only, which is why the shared root takes it as a parameter.
+            suppressSetupWizard = isRunningRealPumpTest(),
             content = { navController -> AppContent(navController) }
         )
     }
@@ -338,16 +365,9 @@ class ComposeMainActivity : MetroAppCompatActivity() {
             onDispose { navController.removeOnDestinationChangedListener(listener) }
         }
 
-        // Auto-launch setup wizard on first run
-        LaunchedEffect(Unit) {
-            if (!preferences.get(BooleanNonKey.GeneralSetupWizardProcessed) && !isRunningRealPumpTest()) {
-                protectionCheck.requestProtection(ProtectionCheck.Protection.PREFERENCES) { result ->
-                    if (result == ProtectionResult.GRANTED) {
-                        navController.navigate(AppRoute.SetupWizard.route)
-                    }
-                }
-            }
-        }
+        // The first-run setup wizard used to be opened here, which is why only Android ever offered
+        // it. It is in `AapsAppRoot` now, so desktop and iOS get it too; this shell only says when to
+        // keep it shut - see `suppressSetupWizard` where AapsAppRoot is called below.
 
         // Permissions bottom sheet
         val permState by permissionsViewModel.uiState.collectAsStateWithLifecycle()
@@ -446,9 +466,6 @@ class ComposeMainActivity : MetroAppCompatActivity() {
         }
 
         val state by mainViewModel.uiState.collectAsStateWithLifecycle()
-        val bolusState by bolusProgressData.state.collectAsStateWithLifecycle()
-        val pumpStatusBanner by pumpCommunicationStatus.statusBannerFlow.collectAsStateWithLifecycle()
-        val pumpQueueStatus by pumpCommunicationStatus.queueStatusFlow.collectAsStateWithLifecycle()
 
         NavHost(
             navController = navController,
@@ -567,31 +584,6 @@ class ComposeMainActivity : MetroAppCompatActivity() {
                 },
             )
         }
-
-        // Modal bolus progress overlay — shown above everything for standard bolus
-        bolusState?.let { state ->
-            if (!state.isSMB) {
-                val pumpStatus = pumpStatusBanner?.text ?: ""
-                val queueStatus = pumpQueueStatus
-                PumpActivityDialog(
-                    bolusState = state,
-                    pumpStatus = pumpStatus,
-                    queueStatus = queueStatus,
-                    isModal = true,
-                    onStop = {
-                        if (config.AAPSCLIENT) {
-                            clientControlActionDispatcher.stopBolus()
-                            bolusProgressData.stopPressed()
-                        } else {
-                            commandQueue.cancelAllBoluses(null)
-                        }
-                    },
-                    // Only reachable via the stalled-state Dismiss button (client/follower): hides the
-                    // local mirror dialog. Delivery belongs to the master — this does not touch the pump.
-                    onDismiss = { bolusProgressData.clear() }
-                )
-            }
-        }
     }
 
 
@@ -614,6 +606,15 @@ class ComposeMainActivity : MetroAppCompatActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        // A background alarm the user has not answered: nothing in this screen can stop it, so show
+        // its alarm screen again (#5338). In onStart and not in onResume: the alarm screen is
+        // translucent, so leaving it with Back resumes this activity without starting it, and the
+        // alarm screen does not come straight back.
+        alarmNotificationManager.unansweredAlarmIntent()?.let { startActivity(it) }
+    }
+
     override fun onResume() {
         super.onResume()
         if (!config.appInitialized) return
@@ -624,11 +625,23 @@ class ComposeMainActivity : MetroAppCompatActivity() {
         permissionsViewModel.refresh()
     }
 
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(LocaleHelper.wrap(newBase))
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_LANGUAGE, resources.configuration.locales.toLanguageTags())
+    }
+
+    private companion object {
+
+        /** The language this screen was shown in, to notice a recreate in another one (see onCreate). */
+        const val STATE_LANGUAGE = "appLanguage"
     }
 
     override fun onDestroy() {
+        // A recreate keeps the view models, so after a language change they still showed the texts
+        // they had built in the old language ("Buclă închisă" on a Czech screen), and after an import
+        // the values from before it. A restart rebuilds them too, as iOS and the desktop do. Cleared
+        // here, while Android hands this store to the next activity, so that one starts with none.
+        if (rebuildingForRestart) viewModelStore.clear()
         disposable.clear()
         accessTree = null
         requestMultiplePermissions = null
@@ -641,16 +654,14 @@ class ComposeMainActivity : MetroAppCompatActivity() {
         lifecycleScope.launch {
             preferences.observe(BooleanKey.OverviewKeepScreenOn).collect { setupWakeLock() }
         }
-        // Language change requires full restart to reload resources
+        // A rebuild asked for by code that cannot reach this activity: `MainApp` once Android has applied a
+        // new language, an import applying its settings. Android answers it by recreating; the view models
+        // go too, see onDestroy.
         lifecycleScope.launch {
-            preferences.observe(StringKey.GeneralLanguage).drop(1).collect { recreate() }
-        }
-        // The same rebuild, asked for by code that cannot reach this activity - an import applying
-        // its settings, for one. Android answers it by recreating, because that is the only thing
-        // that re-runs `attachBaseContext` and so the only thing that can change the locale
-        // `Resources` resolve against.
-        lifecycleScope.launch {
-            uiRestart.signal.drop(1).collect { recreate() }
+            uiRestart.signal.drop(1).collect {
+                rebuildingForRestart = true
+                recreate()
+            }
         }
     }
 

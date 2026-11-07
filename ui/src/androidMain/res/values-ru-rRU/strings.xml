@@ -13,8 +13,6 @@
     <string name="widget_compact_bg_description">AAPS ГК + IOB + COB (компактный)</string>
     <string name="widget_small_description">AAPS Маленький</string>
     <!--     Activities-->
-    <string name="activity_monitor">Монитор активности</string>
-    <string name="time_range">Диапазон времени</string>
     <string name="dexcom_tir">Dexcom TIR</string>
     <string name="cgp_title">Пятиугольник глюкозы (CGP) — 14 дней</string>
     <string name="cgp_hypo" comment="Glucose Pentagon axis: Hypoglycemia">Гипо</string>
@@ -27,7 +25,6 @@
     <string name="cgp_pgr_moderate">Средний риск</string>
     <string name="cgp_pgr_high">Высокий риск</string>
     <string name="cgp_pgr_extremely_high">Крайне высокий риск</string>
-    <string name="do_you_want_reset_stats">Хотите сбросить статистику активности?</string>
     <string name="do_you_want_recalculate_tdd_stats">Хотите пересчитать статистику TDD?</string>
     <string name="calculation_in_progress">Идет подсчет</string>
     <string name="age">Возраст</string>
@@ -70,7 +67,6 @@
     <string name="aaps_bolus_icon_label">Болюс</string>
     <string name="aaps_carbs_icon_label">Углеводы</string>
     <string name="aaps_tbr_icon_label">Временная базальная скорость</string>
-    <string name="aaps_activity_icon_label">Упражнения</string>
     <string name="aaps_note_icon_label">Примечание</string>
     <string name="aaps_automation_icon_label">Автоматизация</string>
     <string name="aaps_calibration_icon_label">Калибровка</string>
@@ -162,7 +158,6 @@
     <!-- WizardDialog -->
     <string name="missing_carbs">Не хватает %1$d г</string>
     <string name="wizard_carbs_type_bread_desc">100% быстрых углеводов, без медленных углеводов</string>
-    <string name="wizard_carbs_type_desc">Углеводы уменьшены на %1$d%%, добавленные eCarbs %2$d%% отложены на %3$d мин из %4$d ч</string>
     <string name="wizard_include_info">Нажмите для включения/исключения из расчета:\n• ГК — гликемия (ВКЛ при запуске)\n• ВЦ — временная цель (ВКЛ при запуске)\n• Тренд — тренд гликемии (запомнено последнее состояние)\n• IOB — активный инсулин (ВКЛ при запуске)\n• COB — активные углеводы (запомнено последнее состояние)</string>
     <!-- Treatments -->
     <string name="no_records_available">Нет доступных записей</string>
@@ -291,11 +286,6 @@
     <string name="widget_rm_disabled">Отключено</string>
     <string name="widget_rm_suspended">Помпа остановлена</string>
     <string name="widget_rm_resume">Возобновить</string>
-    <!-- Calibration entry rejection reasons -->
-    <string name="cal_reject_delta_too_high">Калибровка не сохранена: ГК меняется слишком быстро (Δ %1$s %3$s за 5 минут, предел %2$s). Повторите попытку, когда глюкоза стабилизируется.</string>
-    <string name="cal_reject_no_pair">Калибровка не сохранена: последние 10 минут не было показаний.</string>
-    <string name="cal_reject_warmup">Калибровка не сохранена: датчик все еще находится в 2-х часовом прогреве.</string>
-    <string name="cal_reject_no_session">Калибровка не сохранена: нет активных сессий датчика. Сперва сделайте отметку о его замене.</string>
     <!-- Calibration preflight messages shown in the dialog before submit -->
     <string name="cal_precheck_warmup">Датчик все еще прогревается. Калибровка доступна в %1$s.</string>
     <string name="cal_precheck_no_session">Нет активных сессий датчика.</string>

@@ -10,6 +10,8 @@
     <!-- AAPSClient -->
     <!-- Authorized clients (paired devices that can issue signed commands) -->
     <!-- Pair with master (client side PIN entry) -->
+    <string name="pair_with_master_confirm_warning">Nach der Kopplung kann dieses Gerät signierte Befehle an diesen Master senden.</string>
+    <!-- Client set-up from the master's QR code -->
     <!-- Client-control orphan notification (master no longer recognises this client) -->
     <string name="ns_client">Nightscout-Client</string>
     <string name="ns_client_url">URL:</string>
@@ -54,6 +56,7 @@
     <string name="wear_infos_watchface">Infos Watchface</string>
     <string name="wear_export_watchface">Vorlage exportieren</string>
     <string name="wear_new_custom_watchface_exported">Benutzerdefinierte Watchface Vorlage exportiert</string>
+    <string name="wear_link_to_more_cwf_doc">https://androidaps.readthedocs.io/de/latest/ExchangeSiteCustomWatchfaces/index.html</string>
     <string name="resend_all_data">Alle Daten erneut senden</string>
     <string name="open_settings_on_wear">Öffne Einstellungen auf der Uhr</string>
     <string name="cwf_infos_pref_locked">Liste der von der Watchface gesperrten Prefs</string>
@@ -80,7 +83,7 @@
     <string name="aps">APS</string>
     <string name="last_run">Letzte Ausführung</string>
     <string name="last_enact">Letzte Abgabe</string>
-    <string name="tdd_line">%1$.2fE %1$.0f%%</string>
+    <string name="tdd_line" comment="%1$.2f=total daily dose in units, %2$.0f=that dose as percent of the reference dose. Example: 32.50U 108%">%1$.2fE %2$.0f%%</string>
     <string name="today">Heute</string>
     <string name="weighted">gewichtet</string>
     <!-- SMS Communicator & OTP Authenticator -->
@@ -136,7 +139,7 @@
     <string name="smscommunicator_loop_resume_reply_with_code">Um den Loop fortzusetzen, antworte mit dem Code %1$s</string>
     <string name="smscommunicator_loop_disable_reply_with_code">Um den Loop zu deaktivieren, antworte mit dem Code %1$s</string>
     <string name="smscommunicator_tempbasal_set">TBR mit %1$.2f IE/h für %2$d min wurde erfolgreich gestartet.</string>
-    <string name="smscommunicator_extended_set">Der erweiterte Bolus %1$.2f IE/h für %2$d Minuten wurde erfolgreich gestartet</string>
+    <string name="smscommunicator_extended_set">Der erweiterte Bolus %1$.2f IE für %2$d Minuten wurde erfolgreich gestartet</string>
     <string name="smscommunicator_carbs_set">%1$d g Kohlenhydrate erfolgreich erfasst</string>
     <string name="smscommunicator_carbs_failed">Eingabe von %1$d g Kohlenhydraten ist fehlgeschlagen.</string>
     <string name="smscommunicator_tempbasal_set_percent">Die temporäre Basalrate wurde erfolgreich für %2$d Minuten auf %1$d%% gesetzt.</string>

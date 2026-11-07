@@ -8,6 +8,7 @@ import android.os.SystemClock
 import app.aaps.core.data.configuration.Constants
 import app.aaps.core.data.pump.defs.PumpType
 import app.aaps.core.data.time.T
+import app.aaps.core.interfaces.di.MetroMemberInjector
 import app.aaps.core.interfaces.insulin.ConcentrationHelper
 import app.aaps.core.interfaces.logging.AAPSLogger
 import app.aaps.core.interfaces.logging.LTag
@@ -34,6 +35,7 @@ import app.aaps.core.interfaces.ui.UiInteraction
 import app.aaps.core.interfaces.utils.DateUtil
 import app.aaps.core.keys.interfaces.Preferences
 import app.aaps.core.keys.interfaces.TextRef
+import app.aaps.core.objects.workflow.MetroService
 import app.aaps.pump.diaconn.DiaconnG8Plugin
 import app.aaps.pump.diaconn.DiaconnG8Pump
 import app.aaps.pump.diaconn.R
@@ -74,8 +76,7 @@ import app.aaps.pump.diaconn.packet.TempBasalSettingPacket
 import app.aaps.pump.diaconn.packet.TimeInquirePacket
 import app.aaps.pump.diaconn.packet.TimeSettingPacket
 import app.aaps.pump.diaconn.pumplog.PumpLogUtil
-import app.aaps.core.objects.workflow.MetroService
-import app.aaps.core.interfaces.di.MetroMemberInjector
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
@@ -87,7 +88,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
-import dev.zacsweers.metro.Inject
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.floor
@@ -270,7 +270,7 @@ class DiaconnG8Service : MetroService() {
                 if (System.currentTimeMillis() > lastApproachingDailyLimit + 30 * 60 * 1000) {
                     notificationManager.post(NotificationId.APPROACHING_DAILY_LIMIT, TextRef.AndroidRes(R.string.approachingdailylimit))
                     pumpSync.insertAnnouncement(
-                        rh.gs(R.string.approachingdailylimit) + ": " + diaconnG8Pump.dailyTotalUnits + "/" + diaconnG8Pump.maxDailyTotalUnits + "U",
+                        rh.gs(app.aaps.core.interfaces.R.string.confirmation_line, rh.gs(R.string.approachingdailylimit), rh.gs(app.aaps.core.interfaces.R.string.values_with_slash, diaconnG8Pump.dailyTotalUnits.toString(), rh.gs(app.aaps.core.ui.R.string.units_format_insulin_int, diaconnG8Pump.maxDailyTotalUnits))),
                         null,
                         PumpType.DIACONN_G8,
                         diaconnG8Pump.serialNo.toString()

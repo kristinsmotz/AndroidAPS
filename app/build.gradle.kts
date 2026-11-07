@@ -160,6 +160,8 @@ android {
         create("aapsclient2") {
             applicationId = "info.nightscout.aapsclient2"
             dimension = "standard"
+            resValue("string", "app_name", "AAPSClient2")
+            versionName = Versions.appVersion + "-aapsclient2"
             resValue("string", "app_name", "EDVIN AAPSClient2")
             versionName = Versions.appVersion + "-aapsclient"
             manifestPlaceholders["appIcon"] = "@mipmap/ic_blueowl"

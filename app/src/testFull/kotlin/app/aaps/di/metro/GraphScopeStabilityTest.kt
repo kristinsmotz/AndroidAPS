@@ -1,5 +1,9 @@
 package app.aaps.di.metro
 
+import app.aaps.di.metro.GraphScopeStabilityTest.Companion.FRESH_EACH_READ
+import app.aaps.di.metro.GraphScopeStabilityTest.Companion.PUMP_UNREADABLE
+import app.aaps.di.metro.GraphScopeStabilityTest.Companion.SINGLE_INSTANCE
+import app.aaps.di.metro.GraphScopeStabilityTest.Companion.UNREADABLE
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 
@@ -92,7 +96,6 @@ class GraphScopeStabilityTest {
             "activePlugin",
             "activeSceneManager",
             "activeSceneSync",
-            "activityMonitor",
             "alarmSoundPlayer",
             "appRepository",
             "appScope",
@@ -134,6 +137,7 @@ class GraphScopeStabilityTest {
             "dexcomTirCalculator",
             "dstHelper",
             "dstHelperPlugin",
+            "eatReminder",
             "exportPasswordDataStore",
             "fabricPrivacy",
             "fabricPrivacyImpl",
@@ -148,6 +152,7 @@ class GraphScopeStabilityTest {
             "importExportPrefs",
             "insulinManager",
             "iobCobCalculator",
+            "keyValueStore",
             "l",
             "lastBgData",
             "lastLocationDataContainer",
@@ -157,6 +162,7 @@ class GraphScopeStabilityTest {
             "loop",
             "maintenance",
             "manualAssistedFactoryProviders",
+            "masterActionExecutor",
             "notificationHolder",
             "notificationManager",
             "nsClient",
@@ -180,7 +186,7 @@ class GraphScopeStabilityTest {
             "processedTbrEbData",
             "profileFunction",
             "profileRepository",
-            "profileSwitchExpiryScheduler",
+            "profileSwitchScheduler",
             "profileSwitchSilentGate",
             "profileUtil",
             "profiler",
@@ -206,12 +212,10 @@ class GraphScopeStabilityTest {
             "sceneStore",
             "scenes",
             "secureEncrypt",
-            "sharedPreferences",
             "signatureVerifierPlugin",
             "smsCommunicatorPlugin",
             "smsCommunicatorRepository",
             "snackbarNotificationFallback",
-            "sp",
             "storage",
             "storeDataForDb",
             "tddCalculator",
@@ -222,12 +226,12 @@ class GraphScopeStabilityTest {
             "translator",
             "trendCalculator",
             "uiInteraction",
+            "uiRestart",
             "userEntryLogger",
             "userEntryPresentationHelper",
             "versionCheckerUtils",
             "visibilityContext",
             "wearPlugin",
-            "wizardBolusExecutor",
             "wizardExecutor",
             "workflowChainData",
             "xDripBroadcast",
@@ -255,20 +259,23 @@ class GraphScopeStabilityTest {
             "pumpWithConcentration",
             "sourceGraph",
             "viewModelProviders",
-            "widgetUpdater",
             "workersGraph",
         )
 
         /**
-         * Cannot be built in a plain-JVM test: `workManager` needs WorkManager initialised. Pinned so a
+         * Cannot be built in a plain-JVM test: `workManager` needs WorkManager initialised, and
+         * `widgetUpdater` registers a display listener on the main looper when it is built. Pinned so a
          * newly-throwing accessor cannot quietly shrink this test's reach.
+         *
+         * `widgetUpdater` was in [FRESH_EACH_READ] until #5246 made it one instance, because it now
+         * holds the update that waits for a display to turn on.
          *
          * `graphConfigRepository` used to be here, blamed on its DataStore file. That was the wrong
          * reason: the blocker was `Dispatchers.Main` in its constructor scope, so nothing could build
          * it without a main looper. `cbe022ba1b` moved that scope to the IO dispatcher and it builds
          * now, which is why it moved into [SINGLE_INSTANCE] - the list grew rather than shrank.
          */
-        val UNREADABLE = setOf("workManager")
+        val UNREADABLE = setOf("widgetUpdater", "workManager")
 
         /**
          * Pump accessors that cannot be built in a plain-JVM test: the Dana RS `bleTransport` reaches
